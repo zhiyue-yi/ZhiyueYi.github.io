@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Recently my friend asked me one question regarding how to interpret the loops in the recursive functions. At first I thought it was fairly easy to understand. Until I dive into the problem, I found it">
+<meta name="keywords" content="loops,programming,recursive loops,recursive,algorithm,data structure">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understanding Loops in Recursive Functions">
+<meta property="og:url" content="https://yizhiyue.me/2019/02/15/understanding-loops-in-recursive-functions/index.html">
+<meta property="og:site_name" content="Zhiyue · 纸岳">
+<meta property="og:description" content="Recently my friend asked me one question regarding how to interpret the loops in the recursive functions. At first I thought it was fairly easy to understand. Until I dive into the problem, I found it">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://i.imgur.com/2Hv27vh.jpg">
+<meta property="og:image" content="https://i.imgur.com/XUXDUJ5.jpg">
+<meta property="og:image" content="https://i.imgur.com/fUZBedH.jpg">
+<meta property="og:image" content="https://i.imgur.com/KAXsliv.jpg">
+<meta property="og:image" content="https://i.imgur.com/BDKOGt6.jpg">
+<meta property="og:image" content="https://i.imgur.com/X6hDTDF.jpg">
+<meta property="og:updated_time" content="2020-07-18T16:29:33.381Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Understanding Loops in Recursive Functions">
+<meta name="twitter:description" content="Recently my friend asked me one question regarding how to interpret the loops in the recursive functions. At first I thought it was fairly easy to understand. Until I dive into the problem, I found it">
+<meta name="twitter:image" content="https://i.imgur.com/2Hv27vh.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yizhiyue.me/2019/02/15/understanding-loops-in-recursive-functions/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Understanding Loops in Recursive Functions | Zhiyue · 纸岳</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128207335-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128207335-1');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhiyue · 纸岳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-grades">
+    <a href="/2019/05/28/GPA-calculator-with-my-real-academic-grades-using-react/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-study"></i> <br>Grades</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2019/02/15/understanding-loops-in-recursive-functions/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhiyue Yi">
+      <meta itemprop="description" content="简博记事 · 山不在高，有仙则灵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhiyue · 纸岳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Understanding Loops in Recursive Functions
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-15 16:03:20" itemprop="dateCreated datePublished" datetime="2019-02-15T16:03:20+08:00">2019-02-15</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/15/understanding-loops-in-recursive-functions/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/15/understanding-loops-in-recursive-functions/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/02/15/understanding-loops-in-recursive-functions/" class="leancloud_visitors" data-flag-title="Understanding Loops in Recursive Functions">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Recently my friend asked me one question regarding how to interpret the loops in the recursive functions. At first I thought it was fairly easy to understand. Until I dive into the problem, I found it was actually quite challenging in understanding the order of function executions. Today, let me summarise my thoughts about this problem.</p>
+<p>Jump to the <a href="#Conclusion-and-Recommendation">conclusion</a> if you would like to skip the analysis and directly hear my advise.</p>
+<h1 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h1><p>It’s a very short piece of Java code.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Class Playground &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        printNum(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printNum</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = num; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">            System.out.println(num);</span><br><span class="line">            printNum(i + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>printNum()</code> functions are recursively called in a for loop within the function and it loops 3 times.</p>
+<p>In the end, it prints</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">1</span><br><span class="line">0</span><br><span class="line">2</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<p>Now here is the problem, how does the program executed?</p>
+<h1 id="Analyse-the-Problem"><a href="#Analyse-the-Problem" class="headerlink" title="Analyse the Problem"></a>Analyse the Problem</h1><h2 id="1st-Level"><a href="#1st-Level" class="headerlink" title="1st Level"></a>1st Level</h2><p>Apparently, in the <code>main()</code> function, <code>printNum()</code> is only called once. So we may consider it as a parent node of all the recursive functions, denoted as <code>f(0)</code>, where <code>f()</code> refers to <code>printNum()</code>. This is the <strong>1st level</strong>.</p>
+<p>In the for loop of <code>f(0)</code>, <code>f()</code> is called 3 times with value passed in as 1, 2 and 3 respectively.</p>
+<p>That is because <code>for(int i = num; i &lt; 3; i++)</code> indicates that the loop starts from <code>i = 0</code> to <code>i = 2</code>, and the recursive function takes <code>i + 1</code> as parameters.</p>
+<p>Hence, under <code>f(0)</code>, there will be 3 functions called sequentially, <code>f(0 + 1)</code>, <code>f(0 + 2)</code> and <code>f(0 + 3)</code>, which are <code>f(1)</code>, <code>f(2)</code> and <code>f(3)</code>.</p>
+<p><img src="https://i.imgur.com/2Hv27vh.jpg" alt="Imgur"></p>
+<h2 id="2nd-Level"><a href="#2nd-Level" class="headerlink" title="2nd Level"></a>2nd Level</h2><p>Now, let’s focus on the <code>f(1)</code> in the <strong>2nd level</strong>.</p>
+<p>In this function, <code>num</code> is valued as <code>1</code>. Hence, the for loop in <code>f(1)</code> only loops <strong>twice</strong>, because <code>for(int i = num; i &lt; 3; i++)</code> indicates that the loop starts from <code>i = 1</code> to <code>i = 2</code>.</p>
+<p>Hence, it will generate <code>f(1 + 1)</code> and <code>f(1 + 2)</code>, which are <code>f(2)</code> and <code>f(3)</code>.</p>
+<p><img src="https://i.imgur.com/XUXDUJ5.jpg" alt="Imgur"></p>
+<h2 id="3rd-Level-and-Completed-Graph"><a href="#3rd-Level-and-Completed-Graph" class="headerlink" title="3rd Level and Completed Graph"></a>3rd Level and Completed Graph</h2><p>Following the pattern, the complete recursive function graph is a below. Note that it stops at <code>f(3)</code>, which is because when <code>num</code> is 3, no forloop will be executed, thus no more recursive functions are called.</p>
+<p><img src="https://i.imgur.com/fUZBedH.jpg" alt="Imgur"></p>
+<h2 id="Execution-Order"><a href="#Execution-Order" class="headerlink" title="Execution Order"></a>Execution Order</h2><p>Now we have a complete diagram of the structure about the recursive functions called and it only left the order of executions.</p>
+<p>This is the most <strong>Tricky</strong> part.</p>
+<p>Some people may think that only when all the loops are executed in this level, can the code in the <strong>NEXT</strong> level can be excuted.</p>
+<p>This is not correct.</p>
+<p>The correct understanding is that, in the same level, 2nd loop will be executed <strong>ONLY</strong> when the 1st loop are completed, even if the 1st loop has recursive calls. That means, when all the recursive functions in the 1st loop must be completed, can the 2nd loop starts to execute.</p>
+<p>The illustration is shown below. The function circled in <span style="color: green">green</span> color can be executed only when all the functions circled in the <span style="color: red">red</span> color all complete execution.</p>
+<p><img src="https://i.imgur.com/KAXsliv.jpg" alt="Imgur"></p>
+<p>Therefore, the execution order of the functions can be determined as below.</p>
+<p><img src="https://i.imgur.com/BDKOGt6.jpg" alt="Imgur"></p>
+<h2 id="Printing-the-Numbers"><a href="#Printing-the-Numbers" class="headerlink" title="Printing the Numbers"></a>Printing the Numbers</h2><p>Finally, we can now determine how the numbers are printed.</p>
+<p>At this stage, we must know <strong>WHAT</strong> number will be printed in the current function.</p>
+<p><code>System.out.println(num);</code> indicates that the variable <code>num</code> is printed. The value of <code>num</code> is passed from the parent function (which calls the current function). Hence, all the print function in the loop should print <strong>the same value</strong>.</p>
+<p>In the following illustration, <code>p()</code> denotes <code>System.out.println()</code> function, and the value inside denotes the number to be printed.</p>
+<p>Note that <code>p()</code> is shown at the left side of <code>f()</code>, it’s because <code>p()</code> is executed first and then <code>f()</code> is executed subsequently.</p>
+<p><img src="https://i.imgur.com/X6hDTDF.jpg" alt="Imgur"></p>
+<p>Hence, following the order of execution, we can get</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">1</span><br><span class="line">0</span><br><span class="line">2</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<h1 id="Conclusion-and-Recommendation"><a href="#Conclusion-and-Recommendation" class="headerlink" title="Conclusion and Recommendation"></a>Conclusion and Recommendation</h1><p>The questions like this one are quite tricky as you need to identify the correct order of execution and correct value to be printed. Also, the <strong>dynamic</strong> start condition of for loops makes it more complicated when analysing.</p>
+<p>After analysis of the problem, I summarised my thoughts and recommend a way of interpretation.</p>
+<ul>
+<li><p>Identify which variable is controlling the <strong>depth</strong> of recursive functions. In this case, <code>num</code> is controlling the depth.</p>
+</li>
+<li><p>Identify which variable is controlling the <strong>loop count</strong> in a recursive functions. In this case, <code>i</code> is controlling the loop count, and you must note that all the loops in this function are at the <strong>same depth</strong>.</p>
+</li>
+<li><p>Understand that the second loop can only be executed after the first loop has been fully executed including <strong>all</strong> the recursive functions called in the first loop.</p>
+</li>
+<li><p>Draw the graph to help you analyse.</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/11/an-application-of-array-reduce-capitalize-strings-in-nested-object/" rel="next" title="An application of Array.Reduce() - Capitalize Strings in Nested-object">
+                <i class="fa fa-chevron-left"></i> An application of Array.Reduce() - Capitalize Strings in Nested-object
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/06/reusability-how-to-take-out-abstract-logics-from-the-requirements/" rel="prev" title="Reusability: How to Take out Abstract Logics from the Requirements">
+                Reusability: How to Take out Abstract Logics from the Requirements <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Zhiyue Yi">
+            
+              <p class="site-author-name" itemprop="name">Zhiyue Yi</p>
+              <p class="site-description motion-element" itemprop="description">简博记事 · 山不在高，有仙则灵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ZhiyueYi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lane0223@hotmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.linkedin.com/in/zhiyue/" target="_blank" title="LinkedIn"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Following
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/berwin/Blog" title="Berwin" target="_blank">Berwin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://godbmw.com/" title="GodBMW" target="_blank">GodBMW</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.phodal.com/" title="Phodal" target="_blank">Phodal</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lihautan.com/" title="Tan Li Hau" target="_blank">Tan Li Hau</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-Description"><span class="nav-number">1.</span> <span class="nav-text">Problem Description</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Analyse-the-Problem"><span class="nav-number">2.</span> <span class="nav-text">Analyse the Problem</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1st-Level"><span class="nav-number">2.1.</span> <span class="nav-text">1st Level</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2nd-Level"><span class="nav-number">2.2.</span> <span class="nav-text">2nd Level</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3rd-Level-and-Completed-Graph"><span class="nav-number">2.3.</span> <span class="nav-text">3rd Level and Completed Graph</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Execution-Order"><span class="nav-number">2.4.</span> <span class="nav-text">Execution Order</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Printing-the-Numbers"><span class="nav-number">2.5.</span> <span class="nav-text">Printing the Numbers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion-and-Recommendation"><span class="nav-number">3.</span> <span class="nav-text">Conclusion and Recommendation</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhiyue Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz", "bdUvz3GBvqIqUVKnu9Idzixo");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yizhiyue.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yizhiyue.me/2019/02/15/understanding-loops-in-recursive-functions/';
+        this.page.identifier = '2019/02/15/understanding-loops-in-recursive-functions/';
+        this.page.title = 'Understanding Loops in Recursive Functions';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yizhiyue.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz",
+                'X-LC-Key': "bdUvz3GBvqIqUVKnu9Idzixo",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

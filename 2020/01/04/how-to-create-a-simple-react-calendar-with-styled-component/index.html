@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="I found it quite interesting doing small components which are widely used in web developments. When I was a junior web developer, I tended to search libraries or plugins online if I need to build som">
+<meta name="keywords" content="javascript,front-end,react,react hooks,useEffect,styled component,calendar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Create a Simple React Calendar with Styled Component">
+<meta property="og:url" content="https://yizhiyue.me/2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/index.html">
+<meta property="og:site_name" content="Zhiyue · 纸岳">
+<meta property="og:description" content="I found it quite interesting doing small components which are widely used in web developments. When I was a junior web developer, I tended to search libraries or plugins online if I need to build som">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://i.imgur.com/qaH1g6u.jpg">
+<meta property="og:image" content="https://i.imgur.com/zBjA4c6.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/1/19/Leap_year.gif">
+<meta property="og:updated_time" content="2020-07-18T16:29:33.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to Create a Simple React Calendar with Styled Component">
+<meta name="twitter:description" content="I found it quite interesting doing small components which are widely used in web developments. When I was a junior web developer, I tended to search libraries or plugins online if I need to build som">
+<meta name="twitter:image" content="https://i.imgur.com/qaH1g6u.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yizhiyue.me/2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>How to Create a Simple React Calendar with Styled Component | Zhiyue · 纸岳</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128207335-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128207335-1');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhiyue · 纸岳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-grades">
+    <a href="/2019/05/28/GPA-calculator-with-my-real-academic-grades-using-react/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-study"></i> <br>Grades</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhiyue Yi">
+      <meta itemprop="description" content="简博记事 · 山不在高，有仙则灵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhiyue · 纸岳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">How to Create a Simple React Calendar with Styled Component
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2020-01-04 17:55:37" itemprop="dateCreated datePublished" datetime="2020-01-04T17:55:37+08:00">2020-01-04</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Front-end/" itemprop="url" rel="index"><span itemprop="name">Front-end</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/" class="leancloud_visitors" data-flag-title="How to Create a Simple React Calendar with Styled Component">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://i.imgur.com/qaH1g6u.jpg" alt="Featured"></p>
+<p>I found it quite interesting doing small components which are widely used in web developments. When I was a junior web developer, I tended to search libraries or plugins online if I need to build some featured. It could be a hard time to implement it because I didn’t try to think how it actually works and I had to rely on the poorly written documents. And sometimes, customization was also difficult because it was hard to understand why the author did the plugin in their way.</p>
+<p>The calendar was one of the most common examples. There are a lot of plugins online, but few of them really teach you how it works. When I was in my previous company as a junior developer, I was tasked to customize a calendar with integration of some business requirements, none of the libraries I found online fulfilled my needs. Then I realize, hey, why not build my own calendar from scratch?</p>
+<p>It’s not hard. Let’s do it with <strong>React</strong> and <strong>Styled Component</strong>!</p>
+<h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><p>The final implementation can be found at <a href="https://codesandbox.io/s/simple-react-calendar-48knh" target="_blank" rel="noopener">simple-react-calendar</a> if you wish to implement quickly without reading through my explanation.</p>
+<iframe src="https://codesandbox.io/embed/simple-react-calendar-48knh?fontsize=14&hidenavigation=1&theme=dark" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" title="simple-react-calendar" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
+<h1 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h1><h2 id="Initialize-Calendar-Component"><a href="#Initialize-Calendar-Component" class="headerlink" title="Initialize Calendar Component"></a>Initialize Calendar Component</h2><p>Initialization of the component is rather simple. Firstly, import the necessary libraries, and then, create a function component called <code>Calendar</code>.</p>
+<p>Inside of the component, let’s return an empty <code>div</code> for now and add in some constants which are</p>
+<ul>
+<li><code>DAYS</code>: an array of numbers of days in every month for a normal year</li>
+<li><code>DAYS_LEAP</code>: an array of numbers of days in every month for a leap year</li>
+<li><code>DAYS_OF_THE_WEEK</code>: an array of names of days of the week</li>
+<li><code>MONTHS</code>: an array of names of months</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useState, useEffect &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> styled, &#123; css &#125; <span class="keyword">from</span> <span class="string">'styled-components'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">Calendar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> DAYS = [<span class="number">31</span>, <span class="number">28</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>];</span><br><span class="line">  <span class="keyword">const</span> DAYS_LEAP = [<span class="number">31</span>, <span class="number">29</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>, <span class="number">30</span>, <span class="number">31</span>];</span><br><span class="line">  <span class="keyword">const</span> DAYS_OF_THE_WEEK = [<span class="string">'MON'</span>, <span class="string">'TUE'</span>, <span class="string">'WED'</span>, <span class="string">'THU'</span>, <span class="string">'FRI'</span>, <span class="string">'SAT'</span>, <span class="string">'SUN'</span>];</span><br><span class="line">  <span class="keyword">const</span> MONTHS = [<span class="string">'JAN'</span>, <span class="string">'FEB'</span>, <span class="string">'MAR'</span>, <span class="string">'APR'</span>, <span class="string">'MAY'</span>, <span class="string">'JUN'</span>, <span class="string">'JUL'</span>, <span class="string">'AUG'</span>, <span class="string">'SEP'</span>, <span class="string">'OCT'</span>, <span class="string">'NOV'</span>, <span class="string">'DEC'</span>];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Will be implemented below</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div /&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Identify-Component-Layout"><a href="#Identify-Component-Layout" class="headerlink" title="Identify Component Layout"></a>Identify Component Layout</h2><p>Now let’s decide what the layout of a calendar component is. Since we are building a basic calendar component, we only need a header with a title current month and year, a previous month button and a next month button.</p>
+<p>As for the body part, it is consisted of 2 parts, which are one row of days of the week and multiple rows of actual days.</p>
+<p><img src="https://i.imgur.com/zBjA4c6.png" alt="Structure of Calendar Component"></p>
+<p>Now, let’s create these parts using styled components and put them above the calendar function component.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Frame = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  width: 400px;</span></span><br><span class="line"><span class="string">  border: 1px solid lightgrey;</span></span><br><span class="line"><span class="string">  box-shadow: 2px 2px 2px #eee;</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Header = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  font-size: 18px;</span></span><br><span class="line"><span class="string">  font-weight: bold;</span></span><br><span class="line"><span class="string">  padding: 10px 10px 5px 10px;</span></span><br><span class="line"><span class="string">  display: flex;</span></span><br><span class="line"><span class="string">  justify-content: space-between;</span></span><br><span class="line"><span class="string">  background-color: #f5f6fa;</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Button = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  cursor: pointer;</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Body = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  width: 100%;</span></span><br><span class="line"><span class="string">  display: flex;</span></span><br><span class="line"><span class="string">  flex-wrap: wrap;</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Day = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  width: 14.2%;</span></span><br><span class="line"><span class="string">  height: 40px;</span></span><br><span class="line"><span class="string">  display: flex;</span></span><br><span class="line"><span class="string">  align-items: center;</span></span><br><span class="line"><span class="string">  justify-content: center;</span></span><br><span class="line"><span class="string">  cursor: pointer;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  <span class="subst">$&#123;props =&gt;</span></span></span><br><span class="line"><span class="string"><span class="subst">    props.isToday &amp;&amp;</span></span></span><br><span class="line"><span class="string"><span class="subst">    css`</span></span></span><br><span class="line"><span class="string"><span class="subst">      border: 1px solid #eee;</span></span></span><br><span class="line"><span class="string"><span class="subst">    `&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  <span class="subst">$&#123;props =&gt;</span></span></span><br><span class="line"><span class="string"><span class="subst">    props.isSelected &amp;&amp;</span></span></span><br><span class="line"><span class="string"><span class="subst">    css`</span></span></span><br><span class="line"><span class="string"><span class="subst">      background-color: #eee;</span></span></span><br><span class="line"><span class="string"><span class="subst">    `&#125;</span></span></span><br><span class="line"><span class="string">`</span>;</span><br></pre></td></tr></table></figure>
+<p>Notice that:</p>
+<ol>
+<li>I use <code>14.2%</code> as the width of the <code>Day</code> component, because there can only be 7 days in a week / row and <code>100% / 7</code> is approximately <code>14.2%</code>.</li>
+<li>For <code>Day</code> styled component, I will check 2 props <code>isToday</code> and <code>isSelected</code> to show a grey border if the day is today, or a grey background if it is selected</li>
+</ol>
+<h2 id="Use-React-Hooks-to-Manage-Date-Month-Year-as-States"><a href="#Use-React-Hooks-to-Manage-Date-Month-Year-as-States" class="headerlink" title="Use React Hooks to Manage Date / Month / Year as States"></a>Use React Hooks to Manage Date / Month / Year as States</h2><p>A calendar must have a current day, month and year displayed. They are considered as <strong>states</strong> to the component. Hence, we use <code>useState</code> react hook to manage these states. The initial values of them are generated from today’s date by default (You may also make the default value of <code>date</code> come from a prop of this component for further extensibility).</p>
+<p>Besides current day, month and year, you also need <code>startDay</code> to identify the first day of the month is which day of the week (Monday, Tuesday or others). After you know which day it is, it’s much easier for you to identify the positions of all the days in the calendar.</p>
+<p>After creating all the states, we also need to manage updates of them. We should make <code>date</code> variable as an entry point for calculations of <code>day</code>, <code>month</code>, <code>year</code> and <code>startDay</code>. Therefore, we can use <code>useEffect</code> react hook to update <code>day</code>, <code>month</code>, <code>year</code> and <code>startDay</code> with a dependency of <code>date</code>, so that later, when we click any day in the calendar, we can call <code>setDate()</code> to update <code>date</code> and trigger the rest of the states to update too.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> today = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">const</span> [date, setDate] = useState(today);</span><br><span class="line"><span class="keyword">const</span> [day, setDay] = useState(date.getDate());</span><br><span class="line"><span class="keyword">const</span> [month, setMonth] = useState(date.getMonth());</span><br><span class="line"><span class="keyword">const</span> [year, setYear] = useState(date.getFullYear());</span><br><span class="line"><span class="keyword">const</span> [startDay, setStartDay] = useState(calculateStartDayOfMonth(date));</span><br><span class="line"></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  setDay(date.getDate());</span><br><span class="line">  setMonth(date.getMonth());</span><br><span class="line">  setYear(date.getFullYear());</span><br><span class="line">  setStartDay(calculateStartDayOfMonth(date));</span><br><span class="line">&#125;, [date]);</span><br></pre></td></tr></table></figure>
+<h2 id="Get-Start-Day-of-the-Month"><a href="#Get-Start-Day-of-the-Month" class="headerlink" title="Get Start Day of the Month"></a>Get Start Day of the Month</h2><p>As mentioned above, we need to get the start day of the month, which is rather simple and straightforward.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getStartDayOfMonth</span>(<span class="params">date: <span class="built_in">Date</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(date.getFullYear(), date.getMonth(), <span class="number">1</span>).getDay();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Check-If-It’s-in-a-Leap-Year"><a href="#Check-If-It’s-in-a-Leap-Year" class="headerlink" title="Check If It’s in a Leap Year"></a>Check If It’s in a Leap Year</h2><p>We also needs to check if we are currently in a leap year, so that we can show correct number of days in February.</p>
+<p>I extracted a picture from <strong><a href="https://zh.wikipedia.org/wiki/%E9%97%B0%E5%B9%B4" target="_blank" rel="noopener">Wikipedia</a></strong> for better illustration of determination of a leap year.</p>
+<blockquote>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Leap_year.gif" alt="Leap Year"></p>
+</blockquote>
+<p>It’s quite clear that, if a year is a leap year, the year is divisible by 4 and by 400 but not by 100.</p>
+<p>For example,</p>
+<ul>
+<li>2020 is a leap year because it is divisible by 4</li>
+<li>2010 is not a leap year because it is not divisible by 4</li>
+<li>2000 is a leap year because it is divisible by 400</li>
+<li>1900 is not a leap year. Although 1900 is divisible by 4 but it is also divisible by 100</li>
+</ul>
+<p>(It’s better to write a unit test for it!!)</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isLeapYear</span>(<span class="params">year: <span class="built_in">number</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (year % <span class="number">4</span> === <span class="number">0</span> &amp;&amp; year % <span class="number">100</span> !== <span class="number">0</span>) || (year % <span class="number">400</span> === <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Build-the-Calendar-with-TSX"><a href="#Build-the-Calendar-with-TSX" class="headerlink" title="Build the Calendar with TSX!"></a>Build the Calendar with TSX!</h2><p>Finally, we can complete the component by adding the render part.</p>
+<p>The 2 buttons in the headers trigger <code>setDate()</code> when being clicked. And it will then trigger <code>useEffect()</code> callback and then update <code>day</code>, <code>month</code>, <code>year</code> and <code>startDay</code>, where <code>month</code> and <code>day</code> are displayed in the title of the header, <code>day</code> is used to determine if the day is the current selected day and start day to compute how many empty blocks it should have before the 1st day of the month.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> days = isLeapYear(date.getFullYear()) ? DAYS_LEAP : DAYS;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> (</span><br><span class="line">  &lt;Frame&gt;</span><br><span class="line">    &lt;Header&gt;</span><br><span class="line">      &lt;Button onClick=&#123;<span class="function"><span class="params">()</span> =&gt;</span> setDate(<span class="keyword">new</span> <span class="built_in">Date</span>(year, month - <span class="number">1</span>, day))&#125;&gt;Prev&lt;<span class="regexp">/Button&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &#123;MONTHS[month]&#125; &#123;year&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;Button onClick=&#123;<span class="function"><span class="params">()</span> =&gt;</span> setDate(<span class="keyword">new</span> <span class="built_in">Date</span>(year, month + <span class="number">1</span>, day))&#125;&gt;Next&lt;<span class="regexp">/Button&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>Header&gt;</span><br><span class="line">    &lt;Body&gt;</span><br><span class="line">      &#123;DAYS_OF_THE_WEEK.map(<span class="function"><span class="params">d</span> =&gt;</span> (</span><br><span class="line">        &lt;Day key=&#123;d&#125;&gt;</span><br><span class="line">          &lt;strong&gt;&#123;d&#125;&lt;<span class="regexp">/strong&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>Day&gt;</span><br><span class="line">      ))&#125;</span><br><span class="line">      &#123;<span class="built_in">Array</span>(days[month] + (startDay - <span class="number">1</span>))</span><br><span class="line">        .fill(<span class="literal">null</span>)</span><br><span class="line">        .map(<span class="function">(<span class="params">_, index</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> d = index - (startDay - <span class="number">2</span>);</span><br><span class="line">          <span class="keyword">return</span> (</span><br><span class="line">            &lt;Day</span><br><span class="line">              key=&#123;index&#125;</span><br><span class="line">              isToday=&#123;d === today.getDate()&#125;</span><br><span class="line">              isSelected=&#123;d === day&#125;</span><br><span class="line">              onClick=&#123;<span class="function"><span class="params">()</span> =&gt;</span> setDate(<span class="keyword">new</span> <span class="built_in">Date</span>(year, month, d))&#125;</span><br><span class="line">            &gt;</span><br><span class="line">              &#123;d &gt; <span class="number">0</span> ? d : <span class="string">''</span>&#125;</span><br><span class="line">            &lt;<span class="regexp">/Day&gt;</span></span><br><span class="line"><span class="regexp">          );</span></span><br><span class="line"><span class="regexp">        &#125;)&#125;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>Body&gt;</span><br><span class="line">  &lt;<span class="regexp">/Frame&gt;</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>Today I shared how to create a simple react calender with styled component. It’s not as difficult as imagined because the only critical part, I think, is to know you need to determine what is the day of the week for the first day of the week. If you can do that, you can determine all the positions of the days. The rest works are just grooming your components to make it more appealing.</p>
+<p>Thank you for reading!!</p>
+<p><em>Featured image is credited to <a href="https://www.pexels.com/photo/photo-of-planner-and-writing-materials-760710/" target="_blank" rel="noopener">Bich Tran from Pexels</a></em></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+            <a href="/tags/Front-end/" rel="tag"># Front-end</a>
+          
+            <a href="/tags/React/" rel="tag"># React</a>
+          
+            <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/08/how-to-create-a-simple-react-countdown-timer/" rel="next" title="How to Create a Simple React Countdown Timer">
+                <i class="fa fa-chevron-left"></i> How to Create a Simple React Countdown Timer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/11/include-your-react-widgets-in-any-web-page/" rel="prev" title="Include Your React Widgets in Any Web Page">
+                Include Your React Widgets in Any Web Page <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Zhiyue Yi">
+            
+              <p class="site-author-name" itemprop="name">Zhiyue Yi</p>
+              <p class="site-description motion-element" itemprop="description">简博记事 · 山不在高，有仙则灵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ZhiyueYi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lane0223@hotmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.linkedin.com/in/zhiyue/" target="_blank" title="LinkedIn"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Following
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/berwin/Blog" title="Berwin" target="_blank">Berwin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://godbmw.com/" title="GodBMW" target="_blank">GodBMW</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.phodal.com/" title="Phodal" target="_blank">Phodal</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lihautan.com/" title="Tan Li Hau" target="_blank">Tan Li Hau</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Solution"><span class="nav-number">1.</span> <span class="nav-text">Solution</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Explanation"><span class="nav-number">2.</span> <span class="nav-text">Explanation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Initialize-Calendar-Component"><span class="nav-number">2.1.</span> <span class="nav-text">Initialize Calendar Component</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identify-Component-Layout"><span class="nav-number">2.2.</span> <span class="nav-text">Identify Component Layout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Use-React-Hooks-to-Manage-Date-Month-Year-as-States"><span class="nav-number">2.3.</span> <span class="nav-text">Use React Hooks to Manage Date / Month / Year as States</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Get-Start-Day-of-the-Month"><span class="nav-number">2.4.</span> <span class="nav-text">Get Start Day of the Month</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Check-If-It’s-in-a-Leap-Year"><span class="nav-number">2.5.</span> <span class="nav-text">Check If It’s in a Leap Year</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-the-Calendar-with-TSX"><span class="nav-number">2.6.</span> <span class="nav-text">Build the Calendar with TSX!</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">3.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhiyue Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz", "bdUvz3GBvqIqUVKnu9Idzixo");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yizhiyue.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yizhiyue.me/2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/';
+        this.page.identifier = '2020/01/04/how-to-create-a-simple-react-calendar-with-styled-component/';
+        this.page.title = 'How to Create a Simple React Calendar with Styled Component';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yizhiyue.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz",
+                'X-LC-Key': "bdUvz3GBvqIqUVKnu9Idzixo",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

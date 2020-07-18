@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Leaf ClassficationA For CZ4041 Machine Learning Assignment from PT3 in AY2018/2019 Semester 2. The Kaggle problem is here https://www.kaggle.com/c/leaf-classification/ GitHub repo is here https://git">
+<meta name="keywords" content="Artificial Intelligence,Machine Learning,Keras,Classification,Ensemble Learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="My First Kaggle Competition: Leaf Classification Using Deep Learning Method and with Keras">
+<meta property="og:url" content="https://yizhiyue.me/2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/index.html">
+<meta property="og:site_name" content="Zhiyue · 纸岳">
+<meta property="og:description" content="Leaf ClassficationA For CZ4041 Machine Learning Assignment from PT3 in AY2018/2019 Semester 2. The Kaggle problem is here https://www.kaggle.com/c/leaf-classification/ GitHub repo is here https://git">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://i.imgur.com/i004qEh.jpg">
+<meta property="og:updated_time" content="2020-07-18T16:29:33.382Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="My First Kaggle Competition: Leaf Classification Using Deep Learning Method and with Keras">
+<meta name="twitter:description" content="Leaf ClassficationA For CZ4041 Machine Learning Assignment from PT3 in AY2018/2019 Semester 2. The Kaggle problem is here https://www.kaggle.com/c/leaf-classification/ GitHub repo is here https://git">
+<meta name="twitter:image" content="https://i.imgur.com/i004qEh.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yizhiyue.me/2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>My First Kaggle Competition: Leaf Classification Using Deep Learning Method and with Keras | Zhiyue · 纸岳</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128207335-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128207335-1');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhiyue · 纸岳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-grades">
+    <a href="/2019/05/28/GPA-calculator-with-my-real-academic-grades-using-react/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-study"></i> <br>Grades</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhiyue Yi">
+      <meta itemprop="description" content="简博记事 · 山不在高，有仙则灵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhiyue · 纸岳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">My First Kaggle Competition: Leaf Classification Using Deep Learning Method and with Keras
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-03-26 20:19:15" itemprop="dateCreated datePublished" datetime="2019-03-26T20:19:15+08:00">2019-03-26</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/" class="leancloud_visitors" data-flag-title="My First Kaggle Competition: Leaf Classification Using Deep Learning Method and with Keras">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://i.imgur.com/i004qEh.jpg" alt="Imgur"></p>
+<h1 id="Leaf-Classfication"><a href="#Leaf-Classfication" class="headerlink" title="Leaf Classfication"></a>Leaf Classfication</h1><p>A For CZ4041 Machine Learning Assignment from PT3 in AY2018/2019 Semester 2.</p>
+<p>The Kaggle problem is here <a href="https://www.kaggle.com/c/leaf-classification/" target="_blank" rel="noopener">https://www.kaggle.com/c/leaf-classification/</a></p>
+<p>GitHub repo is here <a href="https://github.com/ZhiyueYi/kaggle-leaf-classification" target="_blank" rel="noopener">https://github.com/ZhiyueYi/kaggle-leaf-classification</a></p>
+<h2 id="Import-necessary-libraries-and-Define-Constants"><a href="#Import-necessary-libraries-and-Define-Constants" class="headerlink" title="Import necessary libraries and Define Constants"></a>Import necessary libraries and Define Constants</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Dense, Activation, Dropout</span><br><span class="line"><span class="keyword">from</span> keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"><span class="keyword">from</span> keras.callbacks <span class="keyword">import</span> History</span><br><span class="line"><span class="keyword">from</span> keras.preprocessing.text <span class="keyword">import</span> Tokenizer</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder, StandardScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> StratifiedShuffleSplit</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br></pre></td></tr></table></figure>
+<pre><code>Using TensorFlow backend.
+</code></pre><p>Histories are to record model losses in every epoch</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">history1 = History()</span><br><span class="line">history2 = History()</span><br><span class="line">history3 = History()</span><br><span class="line"></span><br><span class="line">LABEL_PATH = <span class="string">'data/'</span></span><br><span class="line">TRAIN_FILE_NAME = <span class="string">'train.csv'</span></span><br><span class="line">TEST_FILE_NAME = <span class="string">'test.csv'</span></span><br></pre></td></tr></table></figure>
+<h2 id="Load-From-CSV"><a href="#Load-From-CSV" class="headerlink" title="Load From CSV"></a>Load From CSV</h2><p>Load features and labels from the train csv file</p>
+<p>y is extracted from the <code>species</code> column and converted from text string to numeric values as classes</p>
+<p>x contains features in the remaining columns except <code>id</code> columns. <code>StandardScaler</code> is used to transform the data so that its distribution will have a <code>mean = 0</code> and standard <code>deviation = 1</code>. It is to standardize the scale of the data for ease of computation and remain the features unaffected.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">train_data_frame = pd.read_csv(LABEL_PATH + TRAIN_FILE_NAME)</span><br><span class="line"></span><br><span class="line">train_data_frame = train_data_frame.drop([<span class="string">'id'</span>], axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">y = train_data_frame.pop(<span class="string">'species'</span>)</span><br><span class="line">classes = np.unique(y)</span><br><span class="line"></span><br><span class="line">y = to_categorical(LabelEncoder().fit(y).transform(y))</span><br><span class="line"></span><br><span class="line">x = StandardScaler().fit(train_data_frame).transform(train_data_frame)</span><br></pre></td></tr></table></figure>
+<p>Use <code>StratifiedShuffleSplit</code> to randomly split the data set into training data and validation data.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sss = StratifiedShuffleSplit(n_splits=<span class="number">10</span>, test_size=<span class="number">0.2</span>,random_state=<span class="number">12345</span>)</span><br><span class="line"></span><br><span class="line">train_index, validation_index = next(iter(sss.split(x, y)))</span><br><span class="line">train_x, validate_x = x[train_index], x[validation_index]</span><br><span class="line">train_y, validate_y = y[train_index], y[validation_index]</span><br><span class="line">print(<span class="string">"train_x dimention: "</span>,train_x.shape)</span><br><span class="line">print(<span class="string">"validate_x dimention:   "</span>,validate_x.shape)</span><br></pre></td></tr></table></figure>
+<pre><code>train_x dimention:  (792, 192)
+validate_x dimention:    (198, 192)
+</code></pre><p>Get the number of classes for later computation</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no_of_classes = len(np.unique(train_y, axis=<span class="number">0</span>))</span><br></pre></td></tr></table></figure>
+<h2 id="Build-model"><a href="#Build-model" class="headerlink" title="Build model"></a>Build model</h2><p>Use ensemble learning method to predict the value.</p>
+<p>Ensemble learning refers to training multiple models with the same set of training data set and validation data set. With multiple sets of models, a pool of predicted values can be generated. We can pick the most possible predicted value from the pool to achieve the best accuracy.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">model1 = Sequential()</span><br><span class="line"></span><br><span class="line">model1.add(Dense(<span class="number">250</span>, activation=<span class="string">'relu'</span>, input_dim = train_x.shape[<span class="number">1</span>]))</span><br><span class="line">model1.add(Dropout(<span class="number">0.2</span>))</span><br><span class="line">model1.add(Dense(<span class="number">150</span>, activation=<span class="string">'relu'</span>))</span><br><span class="line">model1.add(Dropout(<span class="number">0.4</span>))</span><br><span class="line">model1.add(Dense(no_of_classes, activation=tf.nn.softmax))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">model2 = Sequential()</span><br><span class="line"></span><br><span class="line">model2.add(Dense(<span class="number">1000</span>, activation=<span class="string">'tanh'</span>, input_dim = train_x.shape[<span class="number">1</span>]))</span><br><span class="line">model2.add(Dense(<span class="number">1000</span>, activation=<span class="string">'relu'</span>))</span><br><span class="line">model2.add(Dense(<span class="number">1000</span>, activation=<span class="string">'relu'</span>))</span><br><span class="line">model2.add(Dense(no_of_classes, activation=tf.nn.softmax))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">model3 = Sequential()</span><br><span class="line"></span><br><span class="line">model3.add(Dense(<span class="number">500</span>, activation=<span class="string">'relu'</span>, input_dim = train_x.shape[<span class="number">1</span>]))</span><br><span class="line">model3.add(Dropout(<span class="number">0.4</span>))</span><br><span class="line">model3.add(Dense(<span class="number">500</span>, activation=<span class="string">'relu'</span>))</span><br><span class="line">model3.add(Dropout(<span class="number">0.2</span>))</span><br><span class="line">model3.add(Dense(no_of_classes, activation=tf.nn.softmax))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model1.summary()</span><br></pre></td></tr></table></figure>
+<pre><code>_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+dense_1 (Dense)              (None, 250)               48250
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 250)               0
+_________________________________________________________________
+dense_2 (Dense)              (None, 150)               37650
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 150)               0
+_________________________________________________________________
+dense_3 (Dense)              (None, 99)                14949
+=================================================================
+Total params: 100,849
+Trainable params: 100,849
+Non-trainable params: 0
+_________________________________________________________________
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model2.summary()</span><br></pre></td></tr></table></figure>
+<pre><code>_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+dense_4 (Dense)              (None, 1000)              193000
+_________________________________________________________________
+dense_5 (Dense)              (None, 1000)              1001000
+_________________________________________________________________
+dense_6 (Dense)              (None, 1000)              1001000
+_________________________________________________________________
+dense_7 (Dense)              (None, 99)                99099
+=================================================================
+Total params: 2,294,099
+Trainable params: 2,294,099
+Non-trainable params: 0
+_________________________________________________________________
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model3.summary()</span><br></pre></td></tr></table></figure>
+<pre><code>_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+dense_8 (Dense)              (None, 500)               96500
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 500)               0
+_________________________________________________________________
+dense_9 (Dense)              (None, 500)               250500
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 500)               0
+_________________________________________________________________
+dense_10 (Dense)             (None, 99)                49599
+=================================================================
+Total params: 396,599
+Trainable params: 396,599
+Non-trainable params: 0
+_________________________________________________________________
+</code></pre><h2 id="Compile-and-fit-the-model"><a href="#Compile-and-fit-the-model" class="headerlink" title="Compile and fit the model"></a>Compile and fit the model</h2><p>At this stage, the data is pumped into the model and Keras will help to run iterations to reduce the loss as much as possible.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model1.compile(loss=<span class="string">'categorical_crossentropy'</span>, optimizer=<span class="string">'adam'</span>, metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line">model1.fit(train_x, train_y, epochs = <span class="number">50</span>, verbose=<span class="number">0</span>, validation_data=(validate_x, validate_y), callbacks=[history1])</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;keras.callbacks.History at 0x171c05a8240&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model2.compile(loss=<span class="string">'categorical_crossentropy'</span>, optimizer=<span class="string">'adam'</span>, metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line">model2.fit(train_x, train_y, epochs = <span class="number">10</span>, verbose=<span class="number">0</span>, validation_data=(validate_x, validate_y), callbacks=[history2])</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;keras.callbacks.History at 0x171c0e12438&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model3.compile(loss=<span class="string">'categorical_crossentropy'</span>, optimizer=<span class="string">'adam'</span>, metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line">model3.fit(train_x, train_y, epochs = <span class="number">20</span>, verbose=<span class="number">0</span>, validation_data=(validate_x, validate_y), callbacks=[history3])</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;keras.callbacks.History at 0x171c1450908&gt;
+</code></pre><h2 id="Save-Models"><a href="#Save-Models" class="headerlink" title="Save Models"></a>Save Models</h2><p>Trained model information is saved for future use.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model1.save(<span class="string">'models/model_1_0.29073.h5'</span>)</span><br><span class="line">model2.save(<span class="string">'models/model_2_0.29073.h5'</span>)</span><br><span class="line">model3.save(<span class="string">'models/model_3_0.29073.h5'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>Repeat the same data pre-processing procedures on the test dataset</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">test_data_frame = pd.read_csv(LABEL_PATH + TEST_FILE_NAME)</span><br><span class="line"></span><br><span class="line">index = test_data_frame.pop(<span class="string">'id'</span>)</span><br><span class="line"></span><br><span class="line">test_x = StandardScaler().fit(test_data_frame).transform(test_data_frame)</span><br><span class="line"><span class="comment">#test_x = test_data_frame.get_values()</span></span><br></pre></td></tr></table></figure>
+<p>Separately use the 3 models to predict the results based on the test X values.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test_y_1 = model1.predict_classes(test_x)</span><br><span class="line">test_y_2 = model2.predict_classes(test_x)</span><br><span class="line">test_y_3 = model3.predict_classes(test_x)</span><br></pre></td></tr></table></figure>
+<p>A summarised <code>test_y</code> object is generated and sorted by <code>loss</code> in ascending order.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">test_y = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'name'</span>: <span class="string">'test_y_1'</span>,</span><br><span class="line">        <span class="string">'predict'</span>: test_y_1,</span><br><span class="line">        <span class="string">'loss'</span>: history1.history[<span class="string">'loss'</span>][<span class="number">-1</span>]</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        <span class="string">'name'</span>: <span class="string">'test_y_2'</span>,</span><br><span class="line">        <span class="string">'predict'</span>: test_y_2,</span><br><span class="line">        <span class="string">'loss'</span>: history2.history[<span class="string">'loss'</span>][<span class="number">-1</span>]</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        <span class="string">'name'</span>: <span class="string">'test_y_3'</span>,</span><br><span class="line">        <span class="string">'predict'</span>: test_y_3,</span><br><span class="line">        <span class="string">'loss'</span>: history3.history[<span class="string">'loss'</span>][<span class="number">-1</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">test_y = sorted(test_y, key=<span class="keyword">lambda</span> k: k[<span class="string">'loss'</span>])</span><br></pre></td></tr></table></figure>
+<p><code>data_grid</code> is used to store the generated the file format which Kaggle competition will accept.</p>
+<p>Then iterate every predicted data and compare the results in the 3 models.</p>
+<p>If 2 or more models predict the same class, it will be the actual predicted class.</p>
+<p>If 3 models all predict different classes, then the value of the model with the least loss will be athe actual predicted class.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">data_grid = np.zeros((len(test_y_1), len(classes)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(test_y_1)):</span><br><span class="line">    count = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> test <span class="keyword">in</span> test_y:</span><br><span class="line">        <span class="keyword">if</span> test[<span class="string">'predict'</span>][i] <span class="keyword">not</span> <span class="keyword">in</span> count:</span><br><span class="line">            count[test[<span class="string">'predict'</span>][i]] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            count[test[<span class="string">'predict'</span>][i]] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    result = Counter(count)</span><br><span class="line">    predicted = result.most_common(<span class="number">1</span>)</span><br><span class="line">    data_grid[i][predicted[<span class="number">0</span>][<span class="number">0</span>]] = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>Use <code>pd.DataFrame</code> to generate CSV format variable.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prediction = pd.DataFrame(data_grid, index = index, columns = classes)</span><br></pre></td></tr></table></figure>
+<p>Lastly, write the variable into the CSV file for submission.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'submission.csv'</span>,<span class="string">'w'</span>) <span class="keyword">as</span> file:</span><br><span class="line">    file.write(prediction.to_csv())</span><br></pre></td></tr></table></figure>
+<p>Under the same directory, run <code>kaggle competitions submit -c leaf-classification -f submission.csv -m &quot;Message&quot;</code> command to submit the CSV file to Kaggle.</p>
+<h1 id="Thanks…"><a href="#Thanks…" class="headerlink" title="Thanks…"></a>Thanks…</h1><p>Feature image credits to <a href="https://www.pexels.com/photo/brown-dried-leaf-767956/" target="_blank" rel="noopener">https://www.pexels.com/photo/brown-dried-leaf-767956/</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Artificial-Intelligence/" rel="tag"># Artificial Intelligence</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          
+            <a href="/tags/Keras/" rel="tag"># Keras</a>
+          
+            <a href="/tags/Classification/" rel="tag"># Classification</a>
+          
+            <a href="/tags/Ensemble-Learning/" rel="tag"># Ensemble Learning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/23/think-beyond-the-problem/" rel="next" title="Think Beyond the Problem">
+                <i class="fa fa-chevron-left"></i> Think Beyond the Problem
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/09/an-elegant-way-to-solve-adding-commas-between-every-3-digits-problem-in-javascript/" rel="prev" title="An Elegant Way to Solve Adding Commas Between Every 3 Digits Problem in JavaScript">
+                An Elegant Way to Solve Adding Commas Between Every 3 Digits Problem in JavaScript <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Zhiyue Yi">
+            
+              <p class="site-author-name" itemprop="name">Zhiyue Yi</p>
+              <p class="site-description motion-element" itemprop="description">简博记事 · 山不在高，有仙则灵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ZhiyueYi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lane0223@hotmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.linkedin.com/in/zhiyue/" target="_blank" title="LinkedIn"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Following
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/berwin/Blog" title="Berwin" target="_blank">Berwin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://godbmw.com/" title="GodBMW" target="_blank">GodBMW</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.phodal.com/" title="Phodal" target="_blank">Phodal</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lihautan.com/" title="Tan Li Hau" target="_blank">Tan Li Hau</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Leaf-Classfication"><span class="nav-number">1.</span> <span class="nav-text">Leaf Classfication</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Import-necessary-libraries-and-Define-Constants"><span class="nav-number">1.1.</span> <span class="nav-text">Import necessary libraries and Define Constants</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-From-CSV"><span class="nav-number">1.2.</span> <span class="nav-text">Load From CSV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-model"><span class="nav-number">1.3.</span> <span class="nav-text">Build model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compile-and-fit-the-model"><span class="nav-number">1.4.</span> <span class="nav-text">Compile and fit the model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Save-Models"><span class="nav-number">1.5.</span> <span class="nav-text">Save Models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test"><span class="nav-number">1.6.</span> <span class="nav-text">Test</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Thanks…"><span class="nav-number">2.</span> <span class="nav-text">Thanks…</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhiyue Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz", "bdUvz3GBvqIqUVKnu9Idzixo");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yizhiyue.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yizhiyue.me/2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/';
+        this.page.identifier = '2019/03/26/my-first-kaggle-competition-leaf-classfication-using-deep-learning-method-and-with-keras/';
+        this.page.title = 'My First Kaggle Competition: Leaf Classification Using Deep Learning Method and with Keras';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yizhiyue.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz",
+                'X-LC-Key': "bdUvz3GBvqIqUVKnu9Idzixo",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="写在前面的自我检讨 v2上周我发布了一篇博文有多少种硬币组合——找出独特子数组之和，是关于有多少种硬币组合的算法题的解法。虽然算法本身能够给出一个正确答案，可是仔细想来，我却没办法给出一个简单直接的解释为什么这样跑可以奏效。好的算法应该是能够以一种通俗易懂的方法教给别人的，如果连做出这道算法题的人都无法解释清楚，那即便这个算法能够跑起来，也不能算好吧。 就这个问题，一位高人给出了一个更好的解决方式">
+<meta name="keywords" content="Interview,JS,Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有多少种硬币组合，更优解法">
+<meta property="og:url" content="https://yizhiyue.me/2018/11/02/find-out-distinct-sum-of-sub-array-optimized/index.html">
+<meta property="og:site_name" content="Zhiyue · 纸岳">
+<meta property="og:description" content="写在前面的自我检讨 v2上周我发布了一篇博文有多少种硬币组合——找出独特子数组之和，是关于有多少种硬币组合的算法题的解法。虽然算法本身能够给出一个正确答案，可是仔细想来，我却没办法给出一个简单直接的解释为什么这样跑可以奏效。好的算法应该是能够以一种通俗易懂的方法教给别人的，如果连做出这道算法题的人都无法解释清楚，那即便这个算法能够跑起来，也不能算好吧。 就这个问题，一位高人给出了一个更好的解决方式">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-07-18T16:29:33.378Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="有多少种硬币组合，更优解法">
+<meta name="twitter:description" content="写在前面的自我检讨 v2上周我发布了一篇博文有多少种硬币组合——找出独特子数组之和，是关于有多少种硬币组合的算法题的解法。虽然算法本身能够给出一个正确答案，可是仔细想来，我却没办法给出一个简单直接的解释为什么这样跑可以奏效。好的算法应该是能够以一种通俗易懂的方法教给别人的，如果连做出这道算法题的人都无法解释清楚，那即便这个算法能够跑起来，也不能算好吧。 就这个问题，一位高人给出了一个更好的解决方式">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yizhiyue.me/2018/11/02/find-out-distinct-sum-of-sub-array-optimized/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>有多少种硬币组合，更优解法 | Zhiyue · 纸岳</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128207335-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128207335-1');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhiyue · 纸岳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-grades">
+    <a href="/2019/05/28/GPA-calculator-with-my-real-academic-grades-using-react/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-study"></i> <br>Grades</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2018/11/02/find-out-distinct-sum-of-sub-array-optimized/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhiyue Yi">
+      <meta itemprop="description" content="简博记事 · 山不在高，有仙则灵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhiyue · 纸岳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">有多少种硬币组合，更优解法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-02 18:45:50" itemprop="dateCreated datePublished" datetime="2018-11-02T18:45:50+08:00">2018-11-02</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/02/find-out-distinct-sum-of-sub-array-optimized/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/02/find-out-distinct-sum-of-sub-array-optimized/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/02/find-out-distinct-sum-of-sub-array-optimized/" class="leancloud_visitors" data-flag-title="有多少种硬币组合，更优解法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="写在前面的自我检讨-v2"><a href="#写在前面的自我检讨-v2" class="headerlink" title="写在前面的自我检讨 v2"></a>写在前面的自我检讨 v2</h1><p>上周我发布了一篇博文<a href="https://yizhiyue.me/2018/10/25/find-out-distinct-sum-of-sub-array/"><em>有多少种硬币组合——找出独特子数组之和</em></a>，是关于有多少种硬币组合的算法题的解法。虽然算法本身能够给出一个正确答案，可是仔细想来，我却没办法给出一个简单直接的解释为什么这样跑可以奏效。好的算法应该是能够以一种通俗易懂的方法教给别人的，如果连做出这道算法题的人都无法解释清楚，那即便这个算法能够跑起来，也不能算好吧。</p>
+<p>就这个问题，一位高人给出了一个更好的解决方式，通俗易懂。听完之后，我真是不得不服功力之高深呐~</p>
+<h1 id="问题和复制粘贴的分析"><a href="#问题和复制粘贴的分析" class="headerlink" title="问题和复制粘贴的分析"></a>问题和复制粘贴的分析</h1><p>如果你有一个硬币数组和一个代表其数量的数组，如何得到一共有多少种不同组合所得的和？</p>
+<p>比如：硬币数组<code>[10, 50, 100]</code>，和代表其数量的数组<code>[1, 2, 1]</code>就表示这里一共有三种硬币，1 枚 10 分，2 枚 50 分和 1 枚 100 分硬币。那么其可能的排列组合则包括</p>
+<ol>
+<li>10 = <strong>10</strong></li>
+<li>50 = <strong>50</strong></li>
+<li>100 = <strong>100</strong></li>
+<li>10 + 50 = <strong>60</strong></li>
+<li>10 + 100 = <strong>110</strong></li>
+<li>50 + 50 = 100</li>
+<li>50 + 100 = <strong>150</strong></li>
+<li>10 + 50 + 50 = 110</li>
+<li>10 + 50 + 100 = <strong>160</strong></li>
+<li>50 + 50 + 100 = <strong>200</strong></li>
+<li>10 + 50 + 50 + 100 = <strong>210</strong></li>
+</ol>
+<p>则，不重复的值则包括加黑的部分，一共是 9 个。</p>
+<h1 id="接下来是正经分析"><a href="#接下来是正经分析" class="headerlink" title="接下来是正经分析"></a>接下来是正经分析</h1><h2 id="第一步：将所有硬币组成一个数组"><a href="#第一步：将所有硬币组成一个数组" class="headerlink" title="第一步：将所有硬币组成一个数组"></a>第一步：将所有硬币组成一个数组</h2><p>首先，上一篇博文里的第一步和第二步是正确的，我们确实需要将所有硬币组合起来，组成一个新的数组<code>coinList</code>，其中包含了所有的硬币。则这部分的代码还是继续使用。</p>
+<p>代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Count number of</span></span><br><span class="line"><span class="comment"> * @param &#123;Array&lt;Number&gt;&#125; coins array contains coins with different values</span></span><br><span class="line"><span class="comment"> * @param &#123;Array&lt;Number&gt;&#125; counts array contains corresponding counts of different coins</span></span><br><span class="line"><span class="comment"> * @returns &#123;Number&#125; The count of distinct sums</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">countDistinctSum</span>(<span class="params">coins, counts</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (coins.length !== counts.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> results = &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> coinList = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; coins.length; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; counts[i]; j++) &#123;</span><br><span class="line">      coinList.push(coins[i]);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// where the beauty of algorithm shows</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.keys(results).length - <span class="number">1</span>; <span class="comment">// Remove the empty 0 coin element</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="第二步：了解所有的组合是如何计算得到的"><a href="#第二步：了解所有的组合是如何计算得到的" class="headerlink" title="第二步：了解所有的组合是如何计算得到的"></a>第二步：了解所有的组合是如何计算得到的</h2><p>我们一步一步来看，所有的组合是如何的出来的。假如，现在我们只有一个硬币，1 分。则可能性只有 1 种，那就是<code>[1]</code>。</p>
+<p>现在我们增加一个硬币，2 分。则可能性则变成了<code>[1, 2, 1+2]</code>，3 种。</p>
+<p>如果我们再加一个硬币，3 分呢？则可能性又变成了<code>[1, 2, 3, 1+2, 1+3，2+3，1+2+3]</code>，7 种。</p>
+<p>仔细看，当硬币的数量一个一个地增加，可能的组合数量也相应地有规律地再增加。什么规律？？？好像看不是很清楚。那么我们换一种方法来表示呢？</p>
+<p>如果将硬币表示为 A, B, C。</p>
+<h3 id="一枚硬币：A"><a href="#一枚硬币：A" class="headerlink" title="一枚硬币：A"></a>一枚硬币：A</h3><p>一枚硬币的时候，是：<br><code>A</code></p>
+<h3 id="两枚硬币：A、B"><a href="#两枚硬币：A、B" class="headerlink" title="两枚硬币：A、B"></a>两枚硬币：A、B</h3><p>两枚硬币的时候呢？那我们直接在之前的 A 后面加上一枚新的 B</p>
+<p><code>A + B</code></p>
+<p>除此之外，之前的 A 也应该在里面</p>
+<p>A + B</p>
+<p><code>A</code></p>
+<p>再加上新增加的 B，则变成了：</p>
+<p>A + B</p>
+<p>A</p>
+<p><code>B</code></p>
+<h3 id="三枚硬币：A、B、C"><a href="#三枚硬币：A、B、C" class="headerlink" title="三枚硬币：A、B、C"></a>三枚硬币：A、B、C</h3><p>这时候加第三枚了，我们在之前的这三种情况下都加上 C，则变成了</p>
+<p><code>A + B + C</code></p>
+<p><code>A + C</code></p>
+<p><code>B + C</code></p>
+<p>而之前的那三种组合是还存在的，所以整个数组变成了</p>
+<p>A + B + C</p>
+<p>A + C</p>
+<p>B + C</p>
+<p><code>A + B</code></p>
+<p><code>A</code></p>
+<p><code>B</code></p>
+<p>最后加上新增加的 C，最终得到了</p>
+<p>A + B + C</p>
+<p>A + C</p>
+<p>B + C</p>
+<p>A + B</p>
+<p>A</p>
+<p>B</p>
+<p><code>C</code></p>
+<p>这下是否更清楚了？每当一个新的硬币被加进数组之中时，组合的数量始终是之前的两倍多一个。比如：</p>
+<ul>
+<li>1 枚硬币时，组合数量是<code>1</code></li>
+<li>2 枚硬币时，组合数量是<code>1 * 2 + 1 = 3</code></li>
+<li>3 枚硬币时，组合数量是<code>3 * 2 + 1 = 7</code></li>
+<li>4 枚硬币时，组合数量是<code>7 * 2 + 1 = 15</code></li>
+</ul>
+<p>……</p>
+<p>以此类推</p>
+<h2 id="第三步：只储存非重复的值"><a href="#第三步：只储存非重复的值" class="headerlink" title="第三步：只储存非重复的值"></a>第三步：只储存非重复的值</h2><p>在计算过程中，难免会遇到许多重复的值。比如两枚硬币都是 10 分的时候，计算出来的组合是<code>[10, 10, 20]</code>。但其实我们不需要两个 10，而只需要<code>[10, 20]</code>就可以了。这个时候我们需要用到<code>Set</code>这种数据结构来储存数据。因为<code>set</code>里面的元素都是非重复的。</p>
+<p>比如，一组硬币<code>[10, 50, 50]</code>。处理第一枚硬币的时候，<code>Set</code>里有<code>[10]</code>。</p>
+<p>处理第二枚硬币时，对这个<code>Set</code>里的所有元素提取出来并且加上新的硬币值，<code>10 + 50</code>得到了<code>60</code>，并添加得到的和与新添加的这枚硬币值进入进入<code>Set</code>里，得到了<code>[10, 50, 60]</code>.</p>
+<p>处理第三枚硬币时，还是继续提取出这个<code>Set</code>里的所有元素，并且加上新的硬币值。于是：</p>
+<ul>
+<li><code>10 + 50 = 60</code></li>
+<li><code>50 + 50 = 100</code></li>
+<li><code>60 + 50 = 110</code></li>
+</ul>
+<p>将这三个新的和加入<code>Set</code>，去掉重复值之后得到了<code>[10, 50, 60, 100, 110]</code>。然后再把第三枚硬币本身的值，50，也添加进去。但因为 50 已经存在了，则<code>Set</code>还是<code>[10, 50, 60, 100, 110]</code>。</p>
+<p>一直重复循环到最后，我们将得到所有非重复的和。问题至此也被解决了~</p>
+<h1 id="大功告成"><a href="#大功告成" class="headerlink" title="大功告成"></a>大功告成</h1><p>完整代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Count number of</span></span><br><span class="line"><span class="comment"> * @param &#123;Array&lt;Number&gt;&#125; coins array contains coins with different values</span></span><br><span class="line"><span class="comment"> * @param &#123;Array&lt;Number&gt;&#125; counts array contains corresponding counts of different coins</span></span><br><span class="line"><span class="comment"> * @returns &#123;Number&#125; The count of distinct sums</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">countDistinctSum</span>(<span class="params">coins, counts</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (coins.length !== counts.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> coinList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; coins.length; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; counts[i]; j++) &#123;</span><br><span class="line">      coinList.push(coins[i]);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Create a new set</span></span><br><span class="line">  <span class="keyword">const</span> results = <span class="keyword">new</span> <span class="built_in">Set</span>();</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; coinList.length; i++) &#123;</span><br><span class="line">    <span class="comment">// tempSum is used to store the temporary sum of every element in the set and new coin value</span></span><br><span class="line">    <span class="keyword">const</span> tempSum = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> it = results.values(), val = <span class="literal">null</span>; (val = it.next().value); ) &#123;</span><br><span class="line">      tempSum.push(val + coinList[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add every sum in tempSum to the set and the set will do automatic duplication removal.</span></span><br><span class="line">    tempSum.forEach(<span class="function"><span class="params">n</span> =&gt;</span> &#123;</span><br><span class="line">      results.add(n);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add the new coin value into the set</span></span><br><span class="line">    results.add(coinList[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> results.size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = [<span class="number">10</span>, <span class="number">50</span>, <span class="number">100</span>];</span><br><span class="line"><span class="keyword">const</span> b = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"Result:"</span>, countDistinctSum(a, b)); <span class="comment">// Result: 9</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Interview/" rel="tag"># Interview</a>
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/25/find-out-distinct-sum-of-sub-array/" rel="next" title="有多少种硬币组合——找出独特子数组之和">
+                <i class="fa fa-chevron-left"></i> 有多少种硬币组合——找出独特子数组之和
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/weekly-update-44/" rel="prev" title="一周记事：week 44">
+                一周记事：week 44 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Zhiyue Yi">
+            
+              <p class="site-author-name" itemprop="name">Zhiyue Yi</p>
+              <p class="site-description motion-element" itemprop="description">简博记事 · 山不在高，有仙则灵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ZhiyueYi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lane0223@hotmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.linkedin.com/in/zhiyue/" target="_blank" title="LinkedIn"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Following
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/berwin/Blog" title="Berwin" target="_blank">Berwin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://godbmw.com/" title="GodBMW" target="_blank">GodBMW</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.phodal.com/" title="Phodal" target="_blank">Phodal</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lihautan.com/" title="Tan Li Hau" target="_blank">Tan Li Hau</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#写在前面的自我检讨-v2"><span class="nav-number">1.</span> <span class="nav-text">写在前面的自我检讨 v2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题和复制粘贴的分析"><span class="nav-number">2.</span> <span class="nav-text">问题和复制粘贴的分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接下来是正经分析"><span class="nav-number">3.</span> <span class="nav-text">接下来是正经分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步：将所有硬币组成一个数组"><span class="nav-number">3.1.</span> <span class="nav-text">第一步：将所有硬币组成一个数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二步：了解所有的组合是如何计算得到的"><span class="nav-number">3.2.</span> <span class="nav-text">第二步：了解所有的组合是如何计算得到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一枚硬币：A"><span class="nav-number">3.2.1.</span> <span class="nav-text">一枚硬币：A</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两枚硬币：A、B"><span class="nav-number">3.2.2.</span> <span class="nav-text">两枚硬币：A、B</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三枚硬币：A、B、C"><span class="nav-number">3.2.3.</span> <span class="nav-text">三枚硬币：A、B、C</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三步：只储存非重复的值"><span class="nav-number">3.3.</span> <span class="nav-text">第三步：只储存非重复的值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#大功告成"><span class="nav-number">4.</span> <span class="nav-text">大功告成</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhiyue Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz", "bdUvz3GBvqIqUVKnu9Idzixo");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yizhiyue.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yizhiyue.me/2018/11/02/find-out-distinct-sum-of-sub-array-optimized/';
+        this.page.identifier = '2018/11/02/find-out-distinct-sum-of-sub-array-optimized/';
+        this.page.title = '有多少种硬币组合，更优解法';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yizhiyue.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz",
+                'X-LC-Key': "bdUvz3GBvqIqUVKnu9Idzixo",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

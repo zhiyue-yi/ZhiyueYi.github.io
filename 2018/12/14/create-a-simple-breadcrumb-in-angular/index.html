@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Recently, I am building an enterprise resource planning (ERP) platform for my company. The system is required to be flexible to hold different individual modules. In this platform, user navigation sho">
+<meta name="keywords" content="javascript,typescript,rxjs,angular,front end,breadcrumbs,component,algorithm,navigation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Create a Simple Breadcrumb in Angular">
+<meta property="og:url" content="https://yizhiyue.me/2018/12/14/create-a-simple-breadcrumb-in-angular/index.html">
+<meta property="og:site_name" content="Zhiyue · 纸岳">
+<meta property="og:description" content="Recently, I am building an enterprise resource planning (ERP) platform for my company. The system is required to be flexible to hold different individual modules. In this platform, user navigation sho">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://i.imgur.com/Goczwv2.png">
+<meta property="og:image" content="https://i.imgur.com/SPqDKbq.png">
+<meta property="og:updated_time" content="2020-07-18T16:29:33.380Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Create a Simple Breadcrumb in Angular">
+<meta name="twitter:description" content="Recently, I am building an enterprise resource planning (ERP) platform for my company. The system is required to be flexible to hold different individual modules. In this platform, user navigation sho">
+<meta name="twitter:image" content="https://i.imgur.com/Goczwv2.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yizhiyue.me/2018/12/14/create-a-simple-breadcrumb-in-angular/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Create a Simple Breadcrumb in Angular | Zhiyue · 纸岳</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128207335-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128207335-1');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhiyue · 纸岳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-grades">
+    <a href="/2019/05/28/GPA-calculator-with-my-real-academic-grades-using-react/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-study"></i> <br>Grades</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2018/12/14/create-a-simple-breadcrumb-in-angular/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhiyue Yi">
+      <meta itemprop="description" content="简博记事 · 山不在高，有仙则灵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhiyue · 纸岳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Create a Simple Breadcrumb in Angular
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-12-14 18:43:41" itemprop="dateCreated datePublished" datetime="2018-12-14T18:43:41+08:00">2018-12-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Front-end/" itemprop="url" rel="index"><span itemprop="name">Front-end</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/14/create-a-simple-breadcrumb-in-angular/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/14/create-a-simple-breadcrumb-in-angular/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/12/14/create-a-simple-breadcrumb-in-angular/" class="leancloud_visitors" data-flag-title="Create a Simple Breadcrumb in Angular">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Recently, I am building an enterprise resource planning (ERP) platform for my company. The system is required to be flexible to hold different individual modules. In this platform, user navigation should be clear and concise so that the users would conveniently know what location they are at while performing tasks on the platforms.</p>
+<p>For example, a hierarchy like <strong>Dashboard -&gt; IT HelpDesk -&gt; Issue Log -&gt; New</strong> can be provided as a reference of locations. And most importantly, users can navigate back to different level of pages conveniently. So I built a <strong>breadcrumb</strong> component to cater that need.</p>
+<p><strong>Demo for static link:</strong><br><img src="https://i.imgur.com/Goczwv2.png" alt="Imgur"></p>
+<p><strong>Demo for dynamic link (123 is a dynamic ID):</strong><br><img src="https://i.imgur.com/SPqDKbq.png" alt="Imgur"></p>
+<h1 id="Configure-the-Routes"><a href="#Configure-the-Routes" class="headerlink" title="Configure the Routes"></a>Configure the Routes</h1><p>Af first, you need to configure your route correctly.</p>
+<p>Take <strong>Dashboard -&gt; IT HelpDesk -&gt; Issue Log -&gt; New</strong> as an example. Below code snippet shows a basic route structure.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    path: <span class="string">''</span>,</span><br><span class="line">    component: LoginComponent,</span><br><span class="line">&#125;, &#123;</span><br><span class="line">    path: <span class="string">'dashboard'</span>,</span><br><span class="line">    component: DashboardComponent,</span><br><span class="line">    children: [</span><br><span class="line">        &#123;</span><br><span class="line">            path: <span class="string">'it-helpdesk'</span>,</span><br><span class="line">            component: ItHelpdeskComponent,</span><br><span class="line">            children: [</span><br><span class="line">                &#123;</span><br><span class="line">                    path: <span class="string">'issue-log'</span>,</span><br><span class="line">                    children: [</span><br><span class="line">                        &#123;</span><br><span class="line">                            path: <span class="string">''</span>,</span><br><span class="line">                            component: IssueLogListComponent</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            path: <span class="string">'new'</span>,</span><br><span class="line">                            component: IssueLogDetailComponent</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            path: <span class="string">':id'</span>,</span><br><span class="line">                            component: IssueLogDetailComponent</span><br><span class="line">                        &#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In order to use breadcrumb, we need to get their names from this route configuration, as in <code>issue-log</code> route is represented as <code>Issue Log</code> in the breadcrumb. Then we use <code>data</code> attribute in <code>Route</code> to store its display names. Hence, we modify the route configuration as below.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    path: <span class="string">''</span>,</span><br><span class="line">    component: LoginComponent,</span><br><span class="line">&#125;, &#123;</span><br><span class="line">    path: <span class="string">'dashboard'</span>,</span><br><span class="line">    component: DashboardComponent,</span><br><span class="line">    data: &#123;</span><br><span class="line">        breadcrumb: <span class="string">'Dashboard'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    children: [</span><br><span class="line">        &#123;</span><br><span class="line">            path: <span class="string">'it-helpdesk'</span>,</span><br><span class="line">            component: ItHelpdeskComponent,</span><br><span class="line">            data: &#123;</span><br><span class="line">                breadcrumb: <span class="string">'IT Helpdesk'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            children: [</span><br><span class="line">                &#123;</span><br><span class="line">                    path: <span class="string">'issue-log'</span>,</span><br><span class="line">                    data: &#123;</span><br><span class="line">                        breadcrumb: <span class="string">'Issue Log'</span></span><br><span class="line">                    &#125;,</span><br><span class="line">                    children: [</span><br><span class="line">                        &#123;</span><br><span class="line">                            path: <span class="string">''</span>,</span><br><span class="line">                            component: IssueLogListComponent</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            path: <span class="string">'new'</span>,</span><br><span class="line">                            component: IssueLogDetailComponent,</span><br><span class="line">                            data: &#123;</span><br><span class="line">                                breadcrumb: <span class="string">'New'</span></span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            path: <span class="string">':id'</span>,</span><br><span class="line">                            component: IssueLogDetailComponent,</span><br><span class="line">                            data: &#123;</span><br><span class="line">                                breadcrumb: <span class="string">''</span></span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;,</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Notice that the route <code>issue-log/:id</code> has no breadcrumb data yet. That is because this route contains dynamic parameters. We will automate the display text later when building the breadcrumb.</p>
+<h1 id="Breadcrumb-Component"><a href="#Breadcrumb-Component" class="headerlink" title="Breadcrumb Component"></a>Breadcrumb Component</h1><h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><p>The HTML part is rather simple. Just use <code>ol</code> and <code>li</code> to list out all the breadcrumbs with <code>*ngFor</code></p>
+<p><code>breadcrumb.component.html</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">class</span>=<span class="string">"breadcrumb"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngFor</span>=<span class="string">"let breadcrumb of breadcrumbs"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> [<span class="attr">routerLink</span>]=<span class="string">"breadcrumb.url"</span> <span class="attr">routerLinkActive</span>=<span class="string">"router-link-active"</span>&gt;</span></span><br><span class="line">      &#123;&#123; breadcrumb.label &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="SCSS"><a href="#SCSS" class="headerlink" title="SCSS"></a>SCSS</h2><p>The CSS is not complicated either. Take note that when a breadcrumb is hovered, it should be dimmed.</p>
+<p><code>breadcrumb.component.scss</code></p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.breadcrumb</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: none;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">0.8em</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="selector-tag">a</span>,</span><br><span class="line">  <span class="selector-tag">span</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: darkgrey;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">a</span>:hover,</span><br><span class="line">  <span class="selector-tag">span</span>:hover &#123;</span><br><span class="line">    <span class="attribute">color</span>: dimgrey;</span><br><span class="line">    <span class="attribute">text-decoration</span>: none;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">li</span> &#123;</span><br><span class="line">    <span class="attribute">list-style</span>: none;</span><br><span class="line">    <span class="attribute">float</span>: left;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">5px</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">li</span>:last-child &#123;</span><br><span class="line">    <span class="attribute">margin-right</span>: <span class="number">20px</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">li</span>::after &#123;</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">"-&gt;"</span>;</span><br><span class="line">    <span class="attribute">color</span>: darkgrey;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">li</span>:last-child::after &#123;</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="TypeScript"><a href="#TypeScript" class="headerlink" title="TypeScript"></a>TypeScript</h2><p>The most important part is the TypeScript part.</p>
+<h3 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h3><p>The first thing to do is to create an interface to standardize the data structure of a breadcrumb.</p>
+<p><code>breadcrumb.interface.ts</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> interface IBreadCrumb &#123;</span><br><span class="line">  label: string;</span><br><span class="line">  url: string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h3><p>Then we can start to build our breadcrumb component. The basic code structures are as below.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component, OnInit &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; ActivatedRoute, Router, NavigationEnd &#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; IBreadCrumb &#125; <span class="keyword">from</span> <span class="string">'../../../interfaces/breadcrumb.interface'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; filter, distinctUntilChanged &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: <span class="string">'app-breadcrumb'</span>,</span><br><span class="line">  templateUrl: <span class="string">'./breadcrumb.component.html'</span>,</span><br><span class="line">  styleUrls: [<span class="string">'./breadcrumb.component.scss'</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">BreadcrumbComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">  public breadcrumbs: IBreadCrumb[]</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(</span><br><span class="line">    private router: Router,</span><br><span class="line">    private activatedRoute: ActivatedRoute,</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">this</span>.breadcrumbs = <span class="keyword">this</span>.buildBreadCrumb(<span class="keyword">this</span>.activatedRoute.root);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit() &#123;</span><br><span class="line">    <span class="comment">// ... implementation of ngOnInit</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Recursively build breadcrumb according to activated route.</span></span><br><span class="line"><span class="comment">   * @param route</span></span><br><span class="line"><span class="comment">   * @param url</span></span><br><span class="line"><span class="comment">   * @param breadcrumbs</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  buildBreadCrumb(route: ActivatedRoute, <span class="attr">url</span>: string = <span class="string">''</span>, <span class="attr">breadcrumbs</span>: IBreadCrumb[] = []): IBreadCrumb[] &#123;</span><br><span class="line">    <span class="comment">// ... implementation of buildBreadCrumb</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>As you can see, we have 2 functions need to be implemented.</p>
+<p><code>ngOnInit()</code> is the function triggered right when the component is created. In this function, we will get the current route and start to build breadcrumb from its root.</p>
+<p><code>buildBreadCrumb()</code> is the function we actually build a breadcrumb. It’s a <strong>recursive</strong> function to recursively loop the child of route object from the root to leaf, such as <strong>Dashboard</strong> all the way to <strong>Issue Log</strong>.</p>
+<h4 id="buildBreadCrumb"><a href="#buildBreadCrumb" class="headerlink" title="buildBreadCrumb()"></a>buildBreadCrumb()</h4><ol>
+<li>Label and Path<br>First, let’s get the <strong>label</strong> and <strong>path</strong> of a single breadcrumb. Note that <code>routeConfig</code> could be <code>null</code> if the current <code>route</code> is on the root. Therefore, it must be checked before assign <code>route.routeConfig.data.breadcrumb</code> and <code>route.routeConfig.path</code> to variables, otherwise, exceptions will be thrown.</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> label =</span><br><span class="line">  route.routeConfig &amp;&amp; route.routeConfig.data</span><br><span class="line">    ? route.routeConfig.data.breadcrumb</span><br><span class="line">    : <span class="string">""</span>;</span><br><span class="line"><span class="keyword">let</span> path =</span><br><span class="line">  route.routeConfig &amp;&amp; route.routeConfig.data ? route.routeConfig.path : <span class="string">""</span>;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Handling Dynamic Parameters<br>Second, we need to handle dynamic route such as <code>:id</code>. Take a look at this route.</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    path: <span class="string">'issue-log/:id'</span>,</span><br><span class="line">    component: IssueLogDetailComponent</span><br><span class="line">    data: &#123;</span><br><span class="line">        breadcrumb: <span class="string">''</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The breadcrumb is previously left blank because the route is dynamic. I can only know the ID at runtime.</p>
+<p>The activated route contains the actual ID. Hence, we shall dynamically attach the actual ID to the breadcrumb by taking the last route part and checking if it starts with <code>:</code>. If so, it is a dynamic route, then we get the actual ID from <code>route.snapshot.params</code> with its parameter name <code>paramName</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lastRoutePart = path.split(<span class="string">"/"</span>).pop();</span><br><span class="line"><span class="keyword">const</span> isDynamicRoute = lastRoutePart.startsWith(<span class="string">":"</span>);</span><br><span class="line"><span class="keyword">if</span> (isDynamicRoute &amp;&amp; !!route.snapshot) &#123;</span><br><span class="line">  <span class="keyword">const</span> paramName = lastRoutePart.split(<span class="string">":"</span>)[<span class="number">1</span>];</span><br><span class="line">  path = path.replace(lastRoutePart, route.snapshot.params[paramName]);</span><br><span class="line">  label = route.snapshot.params[paramName];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Generate Next URL</li>
+</ol>
+<p>In every recursive loop of route, the path is fragment and a complete path is not available, such as <code>issue-log</code> instead of <code>dashboard/it-helpdesk/issue-log</code>. Therefore, a complete path needs to be re-build and attach to the breadcrumb in the current level.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nextUrl = path ? <span class="string">`<span class="subst">$&#123;url&#125;</span>/<span class="subst">$&#123;path&#125;</span>`</span> : url;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> breadcrumb: IBreadCrumb = &#123;</span><br><span class="line">  label: label,</span><br><span class="line">  url: nextUrl</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>Add Route with Non-empty Label and Recursive Calls</li>
+</ol>
+<p>In your application, there may be some routes which does not have breadcrumb set and these routes should be ignored by the builder.</p>
+<p>Next, if the current route has children, that means that this route is not the leaf route yet and we need to continue to make a recursive call the build next-level route.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> newBreadcrumbs = breadcrumb.label</span><br><span class="line">  ? [...breadcrumbs, breadcrumb]</span><br><span class="line">  : [...breadcrumbs];</span><br><span class="line"><span class="keyword">if</span> (route.firstChild) &#123;</span><br><span class="line">  <span class="comment">//If we are not on our current path yet,</span></span><br><span class="line">  <span class="comment">//there will be more children to look after, to build our breadcumb</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.buildBreadCrumb(route.firstChild, nextUrl, newBreadcrumbs);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> newBreadcrumbs;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>Full Picture of <code>buildBreadCrumb()</code></li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Recursively build breadcrumb according to activated route.</span></span><br><span class="line"><span class="comment"> * @param route</span></span><br><span class="line"><span class="comment"> * @param url</span></span><br><span class="line"><span class="comment"> * @param breadcrumbs</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">buildBreadCrumb(route: ActivatedRoute, <span class="attr">url</span>: string = <span class="string">''</span>, <span class="attr">breadcrumbs</span>: IBreadCrumb[] = []): IBreadCrumb[] &#123;</span><br><span class="line">    <span class="comment">//If no routeConfig is avalailable we are on the root path</span></span><br><span class="line">    <span class="keyword">let</span> label = route.routeConfig &amp;&amp; route.routeConfig.data ? route.routeConfig.data.breadcrumb : <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">let</span> path = route.routeConfig &amp;&amp; route.routeConfig.data ? route.routeConfig.path : <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// If the route is dynamic route such as ':id', remove it</span></span><br><span class="line">    <span class="keyword">const</span> lastRoutePart = path.split(<span class="string">'/'</span>).pop();</span><br><span class="line">    <span class="keyword">const</span> isDynamicRoute = lastRoutePart.startsWith(<span class="string">':'</span>);</span><br><span class="line">    <span class="keyword">if</span>(isDynamicRoute &amp;&amp; !!route.snapshot) &#123;</span><br><span class="line">      <span class="keyword">const</span> paramName = lastRoutePart.split(<span class="string">':'</span>)[<span class="number">1</span>];</span><br><span class="line">      path = path.replace(lastRoutePart, route.snapshot.params[paramName]);</span><br><span class="line">      label = route.snapshot.params[paramName];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//In the routeConfig the complete path is not available,</span></span><br><span class="line">    <span class="comment">//so we rebuild it each time</span></span><br><span class="line">    <span class="keyword">const</span> nextUrl = path ? <span class="string">`<span class="subst">$&#123;url&#125;</span>/<span class="subst">$&#123;path&#125;</span>`</span> : url;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> breadcrumb: IBreadCrumb = &#123;</span><br><span class="line">        label: label,</span><br><span class="line">        url: nextUrl,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// Only adding route with non-empty label</span></span><br><span class="line">    <span class="keyword">const</span> newBreadcrumbs = breadcrumb.label ? [ ...breadcrumbs, breadcrumb ] : [ ...breadcrumbs];</span><br><span class="line">    <span class="keyword">if</span> (route.firstChild) &#123;</span><br><span class="line">        <span class="comment">//If we are not on our current path yet,</span></span><br><span class="line">        <span class="comment">//there will be more children to look after, to build our breadcumb</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.buildBreadCrumb(route.firstChild, nextUrl, newBreadcrumbs);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> newBreadcrumbs;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ngOnInit"><a href="#ngOnInit" class="headerlink" title="ngOnInit()"></a>ngOnInit()</h4><p>Finally, we need to implement <code>ngOnInit()</code> to trigger to start building the breadcrumbs.</p>
+<p>Breadcrumb build should start when a router change event is detected. To detect it, we use <strong>RxJs</strong> to observe the changes.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ngOnInit() &#123;</span><br><span class="line">    <span class="keyword">this</span>.router.events.pipe(</span><br><span class="line">        filter(<span class="function">(<span class="params">event: Event</span>) =&gt;</span> event <span class="keyword">instanceof</span> NavigationEnd),</span><br><span class="line">        distinctUntilChanged(),</span><br><span class="line">    ).subscribe(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.breadcrumbs = <span class="keyword">this</span>.buildBreadCrumb(<span class="keyword">this</span>.activatedRoute.root);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The above code snippet indicates that the router events are observed with a filter on the event type to be NavigationEnd and a distinct change.</p>
+<p>That means if the route is changing and the new value is different from the previous value, then the breadcrumb will start to build. The results of recursive function will be stored in <code>this.breadcrumb</code>, which will be an array as below.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    label: <span class="string">"Dashboard"</span>,</span><br><span class="line">    url: <span class="string">"/dashboard"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    label: <span class="string">"IT Helpdesk"</span>,</span><br><span class="line">    url: <span class="string">"/dashboard/it-helpdesk"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    label: <span class="string">"Issue Log"</span>,</span><br><span class="line">    url: <span class="string">"/dashboard/it-helpdesk/issue-log"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    label: <span class="string">"plfOR05NXxQ1"</span>,</span><br><span class="line">    url: <span class="string">"/dashboard/it-helpdesk/issue-log/plfOR05NXxQ1"</span></span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>Breadcrumbs implement a rather simple algorithm, but I think what makes it confusing is its configurations. As developers, you need to know where the configurations should be done and the features Angular provide. With good understanding of Angular, you can implement some components easily as most of the tools you need have been provided by Angular.</p>
+<p>You may refer to the full code here: <strong><a href="https://github.com/ZhiyueYi/demo-in-blog/tree/master/angular-breadcrumb-demo" target="_blank" rel="noopener">GitHub</a></strong></p>
+<p>Thanks for reading~</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+            <a href="/tags/Front-end/" rel="tag"># Front-end</a>
+          
+            <a href="/tags/Angular/" rel="tag"># Angular</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/09/the-eight-places-where-i-spent-my-youth-life-1/" rel="next" title="八房记（1）">
+                <i class="fa fa-chevron-left"></i> 八房记（1）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/24/handling-http-requests-with-authorization-using-interceptor-in-angular/" rel="prev" title="Handling HTTP Requests with Authorization Using Interceptor in Angular">
+                Handling HTTP Requests with Authorization Using Interceptor in Angular <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Zhiyue Yi">
+            
+              <p class="site-author-name" itemprop="name">Zhiyue Yi</p>
+              <p class="site-description motion-element" itemprop="description">简博记事 · 山不在高，有仙则灵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ZhiyueYi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lane0223@hotmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.linkedin.com/in/zhiyue/" target="_blank" title="LinkedIn"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Following
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/berwin/Blog" title="Berwin" target="_blank">Berwin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://godbmw.com/" title="GodBMW" target="_blank">GodBMW</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.phodal.com/" title="Phodal" target="_blank">Phodal</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lihautan.com/" title="Tan Li Hau" target="_blank">Tan Li Hau</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Configure-the-Routes"><span class="nav-number">1.</span> <span class="nav-text">Configure the Routes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Breadcrumb-Component"><span class="nav-number">2.</span> <span class="nav-text">Breadcrumb Component</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML"><span class="nav-number">2.1.</span> <span class="nav-text">HTML</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SCSS"><span class="nav-number">2.2.</span> <span class="nav-text">SCSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeScript"><span class="nav-number">2.3.</span> <span class="nav-text">TypeScript</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Interface"><span class="nav-number">2.3.1.</span> <span class="nav-text">Interface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Component"><span class="nav-number">2.3.2.</span> <span class="nav-text">Component</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#buildBreadCrumb"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">buildBreadCrumb()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ngOnInit"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">ngOnInit()</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">3.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhiyue Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz", "bdUvz3GBvqIqUVKnu9Idzixo");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yizhiyue.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yizhiyue.me/2018/12/14/create-a-simple-breadcrumb-in-angular/';
+        this.page.identifier = '2018/12/14/create-a-simple-breadcrumb-in-angular/';
+        this.page.title = 'Create a Simple Breadcrumb in Angular';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yizhiyue.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz",
+                'X-LC-Key': "bdUvz3GBvqIqUVKnu9Idzixo",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
