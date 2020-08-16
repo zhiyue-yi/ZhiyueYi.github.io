@@ -117,7 +117,7 @@
 <meta property="og:description" content="Hello everyone! It’s been a long time since my last post because I was so busy with my study in the last semester and, of course, damn COVID-19! But anyway, I finally graduate from the university, so">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="https://imgur.com/stVsxQs.jpg">
-<meta property="og:updated_time" content="2020-07-18T16:29:33.388Z">
+<meta property="og:updated_time" content="2020-08-16T09:51:21.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Include Your React Widgets in Any Web Page">
 <meta name="twitter:description" content="Hello everyone! It’s been a long time since my last post because I was so busy with my study in the last semester and, of course, damn COVID-19! But anyway, I finally graduate from the university, so">
@@ -449,7 +449,7 @@
 <p>The target of this demo is to allow the following HTML codes</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"simple-calendar"</span> <span class="attr">is-click-disabled</span> <span class="attr">min-year</span>=<span class="string">"2020"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./simple-calendar.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>To render an equivalent react component as</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;SimpleCalendar id=<span class="string">"simple-calendar"</span> isClickDisabled=&#123;<span class="literal">true</span>&#125; minYear=&#123;<span class="number">2090</span>&#125;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;SimpleCalendar id=<span class="string">"simple-calendar"</span> isClickDisabled=&#123;<span class="literal">true</span>&#125; minYear=&#123;<span class="number">2020</span>&#125;&gt;</span><br></pre></td></tr></table></figure>
 <h1 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h1><p>For the setup, you can just follow what I did in the demo project. The widget source codes are included in the <code>src</code> folder and the demo web page is in the <code>docs</code> folder.</p>
 <p>The idea is that, we need to use Webpack to bundle whatever in the <code>src</code> folder, and then produce the bundled JavaScript file named <code>simple-calendar.js</code> to the <code>docs</code> folder. Then, the <code>docs/index.html</code> page can load the bundled JavaScript file by <code>&lt;script src=&quot;./simple-calendar.js&quot;&gt;&lt;/script&gt;</code>. In this way, the React widget <code>SimpleCalendar</code> can be rendered in the <code>docs/index.html</code> page.</p>
 <p>What’s most interesting is that, <code>docs/index.html</code> is just a plain static web page, and it can still pass initial configurations to the <code>&lt;div&gt;</code> tag to render the react <code>SimpleCalendar</code> component.</p>
@@ -608,7 +608,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -647,7 +647,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -706,7 +708,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">23</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">26</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

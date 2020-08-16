@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might">
+<meta name="keywords" content="automated testing,javascript,typescript,jest,front-end,back-end,unit test,testing automation,TDD,test driven development">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript">
+<meta property="og:url" content="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/index.html">
+<meta property="og:site_name" content="Zhiyue · 纸岳">
+<meta property="og:description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://i.imgur.com/Q8XTzNE.jpg">
+<meta property="og:updated_time" content="2020-08-16T12:23:38.595Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript">
+<meta name="twitter:description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might">
+<meta name="twitter:image" content="https://i.imgur.com/Q8XTzNE.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript | Zhiyue · 纸岳</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128207335-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128207335-1');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhiyue · 纸岳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-grades">
+    <a href="/2019/05/28/GPA-calculator-with-my-real-academic-grades-using-react/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-study"></i> <br>Grades</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhiyue Yi">
+      <meta itemprop="description" content="简博记事 · 山不在高，有仙则灵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhiyue · 纸岳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2020-08-16 17:54:19" itemprop="dateCreated datePublished" datetime="2020-08-16T17:54:19+08:00">2020-08-16</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/" class="leancloud_visitors" data-flag-title="How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://i.imgur.com/Q8XTzNE.jpg" alt="Featured"></p>
+<h1 id="The-Problem-I-Faced"><a href="#The-Problem-I-Faced" class="headerlink" title="The Problem I Faced"></a>The Problem I Faced</h1><p>When we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might have a headache craeting the variable, if the mocked variable has many properties and you only need to mock some of the property values for specific tests. </p>
+<p>Let’s illustrate this problem with an example. (Jump to the <a href="#The-Good-Way-to-Solvd-It-Use-the-Native-Type-Partial-in-TypeScript">bottom</a> if you want to check the solution directly).</p>
+<p>If you have the <code>Order</code> type has the following structure: </p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Order &#123;</span><br><span class="line">  id: <span class="built_in">number</span>;</span><br><span class="line">  buyer: <span class="built_in">string</span>;</span><br><span class="line">  items: &#123;</span><br><span class="line">    id: <span class="built_in">number</span>;</span><br><span class="line">    description: <span class="built_in">string</span>;</span><br><span class="line">    unit: <span class="built_in">number</span>;</span><br><span class="line">    unitPrice: <span class="built_in">number</span>;</span><br><span class="line">    discount: <span class="built_in">number</span>;</span><br><span class="line">  &#125;[];</span><br><span class="line">  promoCode: <span class="built_in">string</span>;</span><br><span class="line">  totalPrice: <span class="built_in">number</span>;</span><br><span class="line">  buyerMessage: <span class="built_in">string</span>;</span><br><span class="line">  remarks: <span class="built_in">string</span>;</span><br><span class="line">  createdAt: <span class="built_in">Date</span>;</span><br><span class="line">  updatedAt: <span class="built_in">Date</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>And you want to test function called <code>calculateTotalPrice(order: Order): boolean</code>, which takes an order object with <code>Order</code> type as an input, calculate total price for all the items, compare the result with the <code>totalPrice</code> property, and lastly output the boolean of comparison result, which identifies if the calculation matches the existing total price record.</p>
+<p>So, it’s very simple to write a test for it:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">'# calculateTotalPrice'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  it(<span class="string">'should return true if total price matches'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> mockOrder: Order = &#123;</span><br><span class="line">      <span class="comment">// mock some values with total price matching with calculation from records</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    expect(calculateTotalPrice(mockOrder)).toBe(<span class="literal">true</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  it(<span class="string">'should return false if total price does not match'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> mockOrder: Order = &#123;</span><br><span class="line">      <span class="comment">// mock some values with total price NOT matching with calculation from records</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    expect(calculateTotalPrice(mockOrder)).toBe(<span class="literal">false</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Now the problem is, I ONLY need <code>items</code> and <code>totalPrice</code> properties for the test, but TypeScript linter yells to me for a complete data structure like this, how should I do?</p>
+<h1 id="The-Not-so-good-Ways-to-Solve-It"><a href="#The-Not-so-good-Ways-to-Solve-It" class="headerlink" title="The Not-so-good Ways to Solve It"></a>The Not-so-good Ways to Solve It</h1><p>Well, we can directly jump to the <a href="#The-Good-Way-to-Solvd-It-Use-the-Native-Type-Partial-in-TypeScript">correct answer</a> for this problem, because it’s simple to adopt. But, I think it’s more educational if we can learn from the bad cases and understand why they are bad. </p>
+<p>Basically, there are 3 not-so-good ways to solve it, which I’ve tried them all for the past a few years. They are ranked by how bad it is in descending order. </p>
+<h2 id="1-Make-them-optional-why-bother-BAD"><a href="#1-Make-them-optional-why-bother-BAD" class="headerlink" title="#1: Make them optional, why bother? [BAD]"></a>#1: Make them optional, why bother? [BAD]</h2><p>When I was an absolute beginner to TypeScript, I tend to use this simple and brutal method to solve this issue, marking all the properties optional like this:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Order &#123;</span><br><span class="line">  id?: <span class="built_in">number</span>;</span><br><span class="line">  buyer?: <span class="built_in">string</span>;</span><br><span class="line">  items?: &#123;</span><br><span class="line">    id?: <span class="built_in">number</span>;</span><br><span class="line">    description?: <span class="built_in">string</span>;</span><br><span class="line">    unit?: <span class="built_in">number</span>;</span><br><span class="line">    unitPrice?: <span class="built_in">number</span>;</span><br><span class="line">    discount?: <span class="built_in">number</span>;</span><br><span class="line">  &#125;[];</span><br><span class="line">  promoCode?: <span class="built_in">string</span>;</span><br><span class="line">  totalPrice?: <span class="built_in">number</span>;</span><br><span class="line">  buyerMessage?: <span class="built_in">string</span>;</span><br><span class="line">  remarks?: <span class="built_in">string</span>;</span><br><span class="line">  createdAt?: <span class="built_in">Date</span>;</span><br><span class="line">  updatedAt?: <span class="built_in">Date</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This is definitely a BIG no no!</p>
+<p>That’s because the properties are not really optional! They are only optional when you are doing tests. While in the actual code base, these properties can be mandatory. Marking them optional makes you convenient, but the consequence can be disasterous. In this way, you lose the capability to do null / undefined check for the properties, which results your code to likely have careless mistakes not being able to uncover!</p>
+<p>In a word, never give in with your actual codes just because you want to have some conveniences in testing, or whatever other aspects!</p>
+<h2 id="2-ANY-way-we-did-it-Not-so-good"><a href="#2-ANY-way-we-did-it-Not-so-good" class="headerlink" title="#2: ANY way, we did it [Not-so-good]"></a>#2: <strong>ANY</strong> way, we did it [Not-so-good]</h2><p>The second way, is just turning TypeScript to “AnyScript” by adding <code>any</code> to the mocked variable, so that the type check can be ignored and less annoying.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">'should return true if total price matches'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> mockOrder: <span class="built_in">any</span> = &#123;</span><br><span class="line">    items: [</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">2</span>,</span><br><span class="line">        unitPrice: <span class="number">10</span>,</span><br><span class="line">        discount: <span class="number">0</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">1</span>,</span><br><span class="line">        unitPrice: <span class="number">5</span>,</span><br><span class="line">        discount: <span class="number">1</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    totalPrice: <span class="number">24</span>,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  expect(calculateTotalPrice(mockOrder)).toBe(<span class="literal">true</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Well, it actually works, at least in our case. However, the order type is lost. It is not convenient especially when you want to have the intellisense feature when you are constructing the <code>mockOrder</code> variable, as the text editor (mine is VS Code) won’t be able to intelligently notify you what properties an <code>Order</code> object should have, which can be less convenient and annoying most of the time.</p>
+<h2 id="3-I-say-it-is-AS-it-is-Looks-probably-ok"><a href="#3-I-say-it-is-AS-it-is-Looks-probably-ok" class="headerlink" title="#3: I say it is AS it is! [Looks probably ok]"></a>#3: I say it is <strong>AS</strong> it is! [Looks probably ok]</h2><p>The third way, it one step smarter than using <code>any</code>, which is to use <code>as</code> keyword to force adding the <code>Order</code> type at the variable declaration stage.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">'should return true if total price matches'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> mockOrder = &#123;</span><br><span class="line">    items: [</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">2</span>,</span><br><span class="line">        unitPrice: <span class="number">10</span>,</span><br><span class="line">        discount: <span class="number">0</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">1</span>,</span><br><span class="line">        unitPrice: <span class="number">5</span>,</span><br><span class="line">        discount: <span class="number">1</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    totalPrice: <span class="number">24</span>,</span><br><span class="line">  &#125; <span class="keyword">as</span> Order;</span><br><span class="line"></span><br><span class="line">  expect(calculateTotalPrice(mockOrder)).toBe(<span class="literal">true</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>It actually works very well, and I really thought it was the ultimate answer to this problem because It has types and does not affect acutal code base.</p>
+<p>But I still feel something is missing here.</p>
+<p>Hey, what if I put the property which doesn’t belong to the <code>Order</code> object? For instance:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mockOrder = &#123;</span><br><span class="line">  iShouldNotBeHereButHereIam: <span class="literal">true</span>,</span><br><span class="line">  items: [</span><br><span class="line">    &#123;</span><br><span class="line">      unit: <span class="number">2</span>,</span><br><span class="line">      unitPrice: <span class="number">10</span>,</span><br><span class="line">      discount: <span class="number">0</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      unit: <span class="number">1</span>,</span><br><span class="line">      unitPrice: <span class="number">5</span>,</span><br><span class="line">      discount: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  totalPrice: <span class="number">24</span>,</span><br><span class="line">&#125; <span class="keyword">as</span> Order;</span><br></pre></td></tr></table></figure>
+<p>In this case, you can’t really lint the “illegal” property inside of the object, because you have forced the object to be an <code>Order</code> object, which is obviously not so right here.</p>
+<h1 id="The-Good-Way-to-Solvd-It-Use-the-Native-Type-Partial-in-TypeScript"><a href="#The-Good-Way-to-Solvd-It-Use-the-Native-Type-Partial-in-TypeScript" class="headerlink" title="The Good Way to Solvd It: Use the Native Type Partial in TypeScript!"></a>The Good Way to Solvd It: Use the Native Type Partial in TypeScript!</h1><p>So here comes the best approach to this problem, which I just discovered it today.</p>
+<p>It is to use the native type <code>Partial</code> in TypeScript.</p>
+<p>According to <a href="https://www.typescriptlang.org/docs/handbook/utility-types.html" target="_blank" rel="noopener">TypeScript: Handbook - Utility</a>, <code>Partial</code> constructs a type with all properties of Type set to optional. This utility will return a type that represents all subsets of a given type.</p>
+<p>However, we cannot solely use partial here, because our object is nested.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Lint error occurs:</span></span><br><span class="line"><span class="comment">// Type '&#123; unit: number; unitPrice: number; discount: number; &#125;' is missing the following properties from type 'Item': id, description ts(2739)</span></span><br><span class="line"><span class="keyword">const</span> mockOrder: Partial&lt;Order&gt; = &#123;</span><br><span class="line">  items: [</span><br><span class="line">    &#123;</span><br><span class="line">      unit: <span class="number">2</span>,</span><br><span class="line">      unitPrice: <span class="number">10</span>,</span><br><span class="line">      discount: <span class="number">0</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      unit: <span class="number">1</span>,</span><br><span class="line">      unitPrice: <span class="number">5</span>,</span><br><span class="line">      discount: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  totalPrice: <span class="number">24</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>It’s because the <code>Partial</code> only applies to the first level (<code>totalPrice</code> level), but not to the second level (<code>unitPrice</code> level). Hence, we can consider to add a custom <code>RecursivePartial</code> type to a global declaration file like <code>src/declarations.d.ts</code>. (Solution referred to <a href="https://stackoverflow.com/a/47914631" target="_blank" rel="noopener">use Partial in nested property with typescript - Stack Overflow</a>)</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> RecursivePartial&lt;T&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> keyof T]?: RecursivePartial&lt;T[P]&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Then you can complete the test like:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">"# calculateTotalPrice"</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  it(<span class="string">"should return true if total price matches"</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> mockOrder: RecursivePartial&lt;Order&gt; = &#123;</span><br><span class="line">      items: [</span><br><span class="line">        &#123;</span><br><span class="line">          unit: <span class="number">2</span>,</span><br><span class="line">          unitPrice: <span class="number">10</span>,</span><br><span class="line">          discount: <span class="number">0</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          unit: <span class="number">1</span>,</span><br><span class="line">          unitPrice: <span class="number">5</span>,</span><br><span class="line">          discount: <span class="number">1</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      ],</span><br><span class="line">      totalPrice: <span class="number">24</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Now we can safely transform the type to Order here</span></span><br><span class="line">    expect(calculateTotalPrice(mockOrder <span class="keyword">as</span> Order)).toBe(<span class="literal">true</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>This method is good in our circumstances because your object is typed all the time (both in creation and in use) and actual code based does not get affected!</p>
+<p>GitHub Demo is here <a href="https://github.com/ZhiyueYi/demo-in-blog/tree/master/mock-typed-variables" target="_blank" rel="noopener">ZhiyueYi/demo-in-blog</a>;</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+            <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          
+            <a href="/tags/Testing/" rel="tag"># Testing</a>
+          
+            <a href="/tags/Jest/" rel="tag"># Jest</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/10/refactoring-a-cursor-effect-project-with-canvas-in-react/" rel="next" title="Refactoring a Cursor Effect Project with Canvas in React">
+                <i class="fa fa-chevron-left"></i> Refactoring a Cursor Effect Project with Canvas in React
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Zhiyue Yi">
+            
+              <p class="site-author-name" itemprop="name">Zhiyue Yi</p>
+              <p class="site-description motion-element" itemprop="description">简博记事 · 山不在高，有仙则灵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ZhiyueYi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lane0223@hotmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.linkedin.com/in/zhiyue/" target="_blank" title="LinkedIn"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Following
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/berwin/Blog" title="Berwin" target="_blank">Berwin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.phodal.com/" title="Phodal" target="_blank">Phodal</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lihautan.com/" title="Tan Li Hau" target="_blank">Tan Li Hau</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Problem-I-Faced"><span class="nav-number">1.</span> <span class="nav-text">The Problem I Faced</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Not-so-good-Ways-to-Solve-It"><span class="nav-number">2.</span> <span class="nav-text">The Not-so-good Ways to Solve It</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Make-them-optional-why-bother-BAD"><span class="nav-number">2.1.</span> <span class="nav-text">#1: Make them optional, why bother? [BAD]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ANY-way-we-did-it-Not-so-good"><span class="nav-number">2.2.</span> <span class="nav-text">#2: ANY way, we did it [Not-so-good]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-I-say-it-is-AS-it-is-Looks-probably-ok"><span class="nav-number">2.3.</span> <span class="nav-text">#3: I say it is AS it is! [Looks probably ok]</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Good-Way-to-Solvd-It-Use-the-Native-Type-Partial-in-TypeScript"><span class="nav-number">3.</span> <span class="nav-text">The Good Way to Solvd It: Use the Native Type Partial in TypeScript!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhiyue Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz", "bdUvz3GBvqIqUVKnu9Idzixo");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yizhiyue.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/';
+        this.page.identifier = '2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/';
+        this.page.title = 'How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yizhiyue.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz",
+                'X-LC-Key': "bdUvz3GBvqIqUVKnu9Idzixo",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
