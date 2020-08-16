@@ -108,19 +108,19 @@
 
 
 
-  <meta name="description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might">
-<meta name="keywords" content="automated testing,javascript,typescript,jest,front-end,back-end,unit test,testing automation,TDD,test driven development">
+  <meta name="description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types and some mock values to test our functions. However, in TypeScript, you might h">
+<meta name="keywords" content="automated testing,javascript,typescript,jest,mocha,front-end,back-end,unit test,testing automation,TDD,test driven development">
 <meta property="og:type" content="article">
-<meta property="og:title" content="How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript">
-<meta property="og:url" content="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/index.html">
+<meta property="og:title" content="How to Properly Mock Typed Variables in Unit Tests with TypeScript">
+<meta property="og:url" content="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/index.html">
 <meta property="og:site_name" content="Zhiyue · 纸岳">
-<meta property="og:description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might">
+<meta property="og:description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types and some mock values to test our functions. However, in TypeScript, you might h">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="https://i.imgur.com/Q8XTzNE.jpg">
-<meta property="og:updated_time" content="2020-08-16T12:23:38.595Z">
+<meta property="og:updated_time" content="2020-08-16T12:32:50.694Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript">
-<meta name="twitter:description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might">
+<meta name="twitter:title" content="How to Properly Mock Typed Variables in Unit Tests with TypeScript">
+<meta name="twitter:description" content="The Problem I FacedWhen we are doing unit tests, most of the time, we have to create some variables with existing types and some mock values to test our functions. However, in TypeScript, you might h">
 <meta name="twitter:image" content="https://i.imgur.com/Q8XTzNE.jpg">
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <link rel="canonical" href="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/">
+  <link rel="canonical" href="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/">
 
 
 
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript | Zhiyue · 纸岳</title>
+  <title>How to Properly Mock Typed Variables in Unit Tests with TypeScript | Zhiyue · 纸岳</title>
   
 
 
@@ -324,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhiyue Yi">
@@ -341,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript
+          <h1 class="post-title" itemprop="name headline">How to Properly Mock Typed Variables in Unit Tests with TypeScript
               
             
           </h1>
@@ -399,9 +399,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/#comments" itemprop="discussionUrl">
+                <a href="/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -409,7 +409,7 @@
 
           
           
-             <span id="/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/" class="leancloud_visitors" data-flag-title="How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript">
+             <span id="/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/" class="leancloud_visitors" data-flag-title="How to Properly Mock Typed Variables in Unit Tests with TypeScript">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -441,7 +441,7 @@
 
       
         <p><img src="https://i.imgur.com/Q8XTzNE.jpg" alt="Featured"></p>
-<h1 id="The-Problem-I-Faced"><a href="#The-Problem-I-Faced" class="headerlink" title="The Problem I Faced"></a>The Problem I Faced</h1><p>When we are doing unit tests, most of the time, we have to create some variables with existing types with some mock values to test our functions. However, in TypeScript, you might have a headache craeting the variable, if the mocked variable has many properties and you only need to mock some of the property values for specific tests. </p>
+<h1 id="The-Problem-I-Faced"><a href="#The-Problem-I-Faced" class="headerlink" title="The Problem I Faced"></a>The Problem I Faced</h1><p>When we are doing unit tests, most of the time, we have to create some variables with existing types and some mock values to test our functions. However, in TypeScript, you might have a headache craeting the variable, if the mocked variable has many properties and you only want to mock some of the property values for specific tests. </p>
 <p>Let’s illustrate this problem with an example. (Jump to the <a href="#The-Good-Way-to-Solvd-It-Use-the-Native-Type-Partial-in-TypeScript">bottom</a> if you want to check the solution directly).</p>
 <p>If you have the <code>Order</code> type has the following structure: </p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Order &#123;</span><br><span class="line">  id: <span class="built_in">number</span>;</span><br><span class="line">  buyer: <span class="built_in">string</span>;</span><br><span class="line">  items: &#123;</span><br><span class="line">    id: <span class="built_in">number</span>;</span><br><span class="line">    description: <span class="built_in">string</span>;</span><br><span class="line">    unit: <span class="built_in">number</span>;</span><br><span class="line">    unitPrice: <span class="built_in">number</span>;</span><br><span class="line">    discount: <span class="built_in">number</span>;</span><br><span class="line">  &#125;[];</span><br><span class="line">  promoCode: <span class="built_in">string</span>;</span><br><span class="line">  totalPrice: <span class="built_in">number</span>;</span><br><span class="line">  buyerMessage: <span class="built_in">string</span>;</span><br><span class="line">  remarks: <span class="built_in">string</span>;</span><br><span class="line">  createdAt: <span class="built_in">Date</span>;</span><br><span class="line">  updatedAt: <span class="built_in">Date</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -459,7 +459,7 @@
 <h2 id="2-ANY-way-we-did-it-Not-so-good"><a href="#2-ANY-way-we-did-it-Not-so-good" class="headerlink" title="#2: ANY way, we did it [Not-so-good]"></a>#2: <strong>ANY</strong> way, we did it [Not-so-good]</h2><p>The second way, is just turning TypeScript to “AnyScript” by adding <code>any</code> to the mocked variable, so that the type check can be ignored and less annoying.</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">'should return true if total price matches'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> mockOrder: <span class="built_in">any</span> = &#123;</span><br><span class="line">    items: [</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">2</span>,</span><br><span class="line">        unitPrice: <span class="number">10</span>,</span><br><span class="line">        discount: <span class="number">0</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">1</span>,</span><br><span class="line">        unitPrice: <span class="number">5</span>,</span><br><span class="line">        discount: <span class="number">1</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    totalPrice: <span class="number">24</span>,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  expect(calculateTotalPrice(mockOrder)).toBe(<span class="literal">true</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>Well, it actually works, at least in our case. However, the order type is lost. It is not convenient especially when you want to have the intellisense feature when you are constructing the <code>mockOrder</code> variable, as the text editor (mine is VS Code) won’t be able to intelligently notify you what properties an <code>Order</code> object should have, which can be less convenient and annoying most of the time.</p>
-<h2 id="3-I-say-it-is-AS-it-is-Looks-probably-ok"><a href="#3-I-say-it-is-AS-it-is-Looks-probably-ok" class="headerlink" title="#3: I say it is AS it is! [Looks probably ok]"></a>#3: I say it is <strong>AS</strong> it is! [Looks probably ok]</h2><p>The third way, it one step smarter than using <code>any</code>, which is to use <code>as</code> keyword to force adding the <code>Order</code> type at the variable declaration stage.</p>
+<h2 id="3-I-say-it-is-AS-it-is-Looks-probably-ok"><a href="#3-I-say-it-is-AS-it-is-Looks-probably-ok" class="headerlink" title="#3: I say it is AS it is! [Looks probably ok]"></a>#3: I say it is <strong>AS</strong> it is! [Looks probably ok]</h2><p>The third way, it is one step smarter than using <code>any</code>, which is to use <code>as</code> keyword to force adding the <code>Order</code> type at the variable declaration stage.</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">'should return true if total price matches'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> mockOrder = &#123;</span><br><span class="line">    items: [</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">2</span>,</span><br><span class="line">        unitPrice: <span class="number">10</span>,</span><br><span class="line">        discount: <span class="number">0</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        unit: <span class="number">1</span>,</span><br><span class="line">        unitPrice: <span class="number">5</span>,</span><br><span class="line">        discount: <span class="number">1</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    totalPrice: <span class="number">24</span>,</span><br><span class="line">  &#125; <span class="keyword">as</span> Order;</span><br><span class="line"></span><br><span class="line">  expect(calculateTotalPrice(mockOrder)).toBe(<span class="literal">true</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>It actually works very well, and I really thought it was the ultimate answer to this problem because It has types and does not affect acutal code base.</p>
 <p>But I still feel something is missing here.</p>
@@ -476,7 +476,8 @@
 <p>Then you can complete the test like:</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">"# calculateTotalPrice"</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  it(<span class="string">"should return true if total price matches"</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> mockOrder: RecursivePartial&lt;Order&gt; = &#123;</span><br><span class="line">      items: [</span><br><span class="line">        &#123;</span><br><span class="line">          unit: <span class="number">2</span>,</span><br><span class="line">          unitPrice: <span class="number">10</span>,</span><br><span class="line">          discount: <span class="number">0</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          unit: <span class="number">1</span>,</span><br><span class="line">          unitPrice: <span class="number">5</span>,</span><br><span class="line">          discount: <span class="number">1</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      ],</span><br><span class="line">      totalPrice: <span class="number">24</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Now we can safely transform the type to Order here</span></span><br><span class="line">    expect(calculateTotalPrice(mockOrder <span class="keyword">as</span> Order)).toBe(<span class="literal">true</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>This method is good in our circumstances because your object is typed all the time (both in creation and in use) and actual code based does not get affected!</p>
-<p>GitHub Demo is here <a href="https://github.com/ZhiyueYi/demo-in-blog/tree/master/mock-typed-variables" target="_blank" rel="noopener">ZhiyueYi/demo-in-blog</a>;</p>
+<p>GitHub Demo is here <a href="https://github.com/ZhiyueYi/demo-in-blog/tree/master/mock-typed-variables" target="_blank" rel="noopener">ZhiyueYi/demo-in-blog</a></p>
+<p>Cheers!</p>
 
       
     </div>
@@ -1037,9 +1038,9 @@ $(function() {
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/';
-        this.page.identifier = '2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-jest-and-typescript/';
-        this.page.title = 'How to Properly Mock Typed Variables in Unit Tests with Jest and TypeScript';
+        this.page.url = 'https://yizhiyue.me/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/';
+        this.page.identifier = '2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/';
+        this.page.title = 'How to Properly Mock Typed Variables in Unit Tests with TypeScript';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');
