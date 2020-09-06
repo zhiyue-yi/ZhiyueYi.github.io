@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Recently, I have created a Demo Project, which demonstrates how to create a resizable div box by using mouse clicking and dragging. It uses vanilla TypeScript (or removing those types to be JavaScrip">
+<meta name="keywords" content="css,html,styles,resizable,javascript,typescript,image cropper,cropper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Resizable Div Box with Mouse Dragging Support Using Vanilla JavaScript &#x2F; TypeScript">
+<meta property="og:url" content="https://yizhiyue.me/2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/index.html">
+<meta property="og:site_name" content="Zhiyue · 纸岳">
+<meta property="og:description" content="Recently, I have created a Demo Project, which demonstrates how to create a resizable div box by using mouse clicking and dragging. It uses vanilla TypeScript (or removing those types to be JavaScrip">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://imgur.com/HhP3hHx.png">
+<meta property="og:updated_time" content="2020-09-06T10:20:40.666Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Resizable Div Box with Mouse Dragging Support Using Vanilla JavaScript &#x2F; TypeScript">
+<meta name="twitter:description" content="Recently, I have created a Demo Project, which demonstrates how to create a resizable div box by using mouse clicking and dragging. It uses vanilla TypeScript (or removing those types to be JavaScrip">
+<meta name="twitter:image" content="https://imgur.com/HhP3hHx.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yizhiyue.me/2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Resizable Div Box with Mouse Dragging Support Using Vanilla JavaScript / TypeScript | Zhiyue · 纸岳</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128207335-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128207335-1');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhiyue · 纸岳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-grades">
+    <a href="/2019/05/28/GPA-calculator-with-my-real-academic-grades-using-react/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-study"></i> <br>Grades</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yizhiyue.me/2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhiyue Yi">
+      <meta itemprop="description" content="简博记事 · 山不在高，有仙则灵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhiyue · 纸岳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Resizable Div Box with Mouse Dragging Support Using Vanilla JavaScript / TypeScript
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2020-09-06 17:01:19" itemprop="dateCreated datePublished" datetime="2020-09-06T17:01:19+08:00">2020-09-06</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Front-end/" itemprop="url" rel="index"><span itemprop="name">Front-end</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/" class="leancloud_visitors" data-flag-title="Resizable Div Box with Mouse Dragging Support Using Vanilla JavaScript / TypeScript">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://imgur.com/HhP3hHx.png" alt="Featured"></p>
+<p>Recently, I have created a Demo Project, which demonstrates how to create a resizable div box by using mouse clicking and dragging. It uses vanilla TypeScript (or removing those types to be JavaScript). I created this Demo project simply because I wanted to explore how to achieve this effects purely by manipulating with different div elements and event listeners. Here you go:</p>
+<iframe src="https://codesandbox.io/embed/image-cropper-sh2r8?fontsize=14&hidenavigation=1&theme=dark" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" title="image-cropper" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+<p>There are some concepts behind this demo, which I would like to mention</p>
+<h1 id="Determine-The-Position-of-the-Box"><a href="#Determine-The-Position-of-the-Box" class="headerlink" title="Determine The Position of the Box"></a>Determine The Position of the Box</h1><p>Well, this is a simple math implementation here.</p>
+<p>To draw a resizable box, you need to do a mouse click firstly, move the mouse without releasing it, and lastly release the mouse in the end. Hence, there are <em>2 points</em>, the first point being the point where you hit the mouse and the second point being the point where you release the mouse.</p>
+<p>Then, the straight line between the 2 points is how your mouse has moved. And from this line, you can do some calculations and find out the position of the div box and its width and height.</p>
+<p>As illustrated in the following diagram, point start and point end both has individual information of cursor events with their <code>x</code> and <code>y</code> values.</p>
+<p><div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile host=\&quot;app.diagrams.net\&quot; modified=\&quot;2020-09-06T09:35:14.808Z\&quot; agent=\&quot;5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36\&quot; etag=\&quot;NEqwAw0JoMzq8oL-Nbh3\&quot; version=\&quot;13.6.6\&quot; type=\&quot;google\&quot;&gt;&lt;diagram id=\&quot;wmQhEL9kwgOwhA5TVAQa\&quot; name=\&quot;Page-1\&quot;&gt;7VpNc5swEP01PsaDENhwbD7aHvqRaTqT9KiAYmsqkCvLsd1fXwkkjBCJnTRAZ6hzCFqkRXrv7bKSPYEX2e4DR6vlZ5ZiOvG9dDeBlxPfByCK5D9l2ZeW2SwuDQtOUt3pYLghv7E2etq6ISleWx0FY1SQlW1MWJ7jRFg2xDnb2t0eGLWfukIL7BhuEkRd6y1JxdKsyyxD3fiIyWKpHx358/JGhkxnvZL1EqVsWzPBqwm84IyJ8irbXWCqwDO4lOPeP3G3mhjHuThlwDzZ789+fb99v729u6Pfst2X/OuZD0s3j4hu9Ir1bMXeQLDgbLPS3TAXeNcGPLo33T13YqBartQJZhkWfC+7aEcQ6iFaImCm29sD4EGobcsa1oHpiDTJi8r3AQd5oaF4ASwgOA6LRCVPsfLiTeD5dkkEvlmhRN3dyliQtqXI5FMvgbx8Er46TM8w5IKnwYKnYgU7w8p7Y6weCKUXjDJejIVXM/XXCYbaTTSz9CcF6GDqh4GLKZgHHWF6QlRKLzIH4hfD6RWfTuG0wxlGrkRBi0JBVwI9IZb/XTBhYKNZwTQUmuEJaObpO/Xqla2EovWaJDaIeEfEXe36h84L6vpyV2/sTSOXU7+rN4ox09A0D8OKlhlXTg2nzjv+JFLkotiGJ/h4oArEF/g5h0E7yTUS25K2sXFMkSCP9iLamNVPuGZELq/SkN/UUNQQR7lMPapeQjQdxQ1HzZdKiYPjqBBatezXa2/2Iu3lLFcRnaL1snj1AFuFyn6NhMA8Lyy+B6V1LTj7WZV6/oDa+0c1VeWh8HUagqCZ0IJp2KuK5sOqaDoPI0tJR3RUtK4xJ3LdmPclLjBoxoIBaK8hXqy2sKE2v1+tRUNo7e/EMVRGgVH8So6DZsEZ9cpxPHA+ARK4Wj4586aed+zlNMakEoW2TOJX5pSGHxD2WwQBcFxvaiNCEkQ/oXtMr9maCMKUnu6ZECxTgjKHUV5di6qBKFmoronkXCmjLk7j9p3uI9jKEScova/UTLLdQp0KTjOW/Nysphni6l+y4XR/zostlh5c21LFxeeZYwDOBNLLOQNRt5uvRqXibr2iFrl2d9Li7r0+fv/8SVrOWbp3RCDREDZ/Ntg6E9Vx1iZHA03iM5Km9Kntsn3Y8/bk1OCft8Dvdwa/u/2g+EGMBneT/uygCNyg6JeVE8r5kaTDuFPeG/s20HYQ1ZYOu2PeLa4VAyMLx/g4Lf3G4wnl8EjisevyJLLrk6qgtb63gD1ybxz/577jXOzP7D2IH4duMu417H13V5KSx2pGI0vKYF4damqGgqHzsgnFGkH6uSPjxjkSjOHAzLhfUJoThxuB+OgIahznBZ4bOXGv/LjbbsPPVZ6OjR3n1zotVccb0SObh59Hlcdnhx+Zwas/&lt;/diagram&gt;&lt;/mxfile&gt;&quot;}"></div></p>
+<script type="text/javascript" src="https://app.diagrams.net/js/viewer-static.min.js"></script>
+
+<p>Assume point start is <code>(X1, Y1)</code> and point end is <code>(X2, Y2)</code>.</p>
+<p>You can use</p>
+<ul>
+<li><code>abs(X2 - X1)</code> to get width</li>
+<li><code>abs(Y2 - Y1)</code> to get height</li>
+<li><code>min(Y1, Y2)</code> to get top</li>
+<li><code>min(X1, X2)</code> to get left</li>
+</ul>
+<p>And then, all you have to do is just applying these numbers to the respective CSS styles of the div.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">refresh() &#123;</span><br><span class="line">  <span class="keyword">const</span> left = <span class="built_in">Math</span>.min(<span class="keyword">this</span>.startCoordinator.x, <span class="keyword">this</span>.endCoordinator.x);</span><br><span class="line">  <span class="keyword">const</span> right = <span class="built_in">Math</span>.max(<span class="keyword">this</span>.startCoordinator.x, <span class="keyword">this</span>.endCoordinator.x);</span><br><span class="line">  <span class="keyword">const</span> top = <span class="built_in">Math</span>.min(<span class="keyword">this</span>.startCoordinator.y, <span class="keyword">this</span>.endCoordinator.y);</span><br><span class="line">  <span class="keyword">const</span> bottom = <span class="built_in">Math</span>.max(<span class="keyword">this</span>.startCoordinator.y, <span class="keyword">this</span>.endCoordinator.y);</span><br><span class="line">  <span class="keyword">const</span> height = bottom - top;</span><br><span class="line">  <span class="keyword">const</span> width = right - left;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.ref.style.top = <span class="string">`<span class="subst">$&#123;top&#125;</span>px`</span>;</span><br><span class="line">  <span class="keyword">this</span>.ref.style.left = <span class="string">`<span class="subst">$&#123;left&#125;</span>px`</span>;</span><br><span class="line">  <span class="keyword">this</span>.ref.style.width = <span class="string">`<span class="subst">$&#123;width&#125;</span>px`</span>;</span><br><span class="line">  <span class="keyword">this</span>.ref.style.height = <span class="string">`<span class="subst">$&#123;height&#125;</span>px`</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Every time when any of <code>top</code>, <code>left</code>, <code>height</code> and <code>width</code> changes, it indicates the div box should be refreshed and repainted in the web page. By achieving that, simply use the <code>refresh()</code> function to update the styles of the div box</p>
+<h1 id="Resize-the-Box-Using-8-Adjusters"><a href="#Resize-the-Box-Using-8-Adjusters" class="headerlink" title="Resize the Box Using 8 Adjusters"></a>Resize the Box Using 8 Adjusters</h1><p>After initially drawing the div box, there should be 8 adjusters to allow users to resize the box. </p>
+<p>The 8 adjusters are named as </p>
+<ul>
+<li><code>TOP</code></li>
+<li><code>BOTTOM</code></li>
+<li><code>LEFT</code></li>
+<li><code>RIGHT</code></li>
+<li><code>TOP_LEFT</code></li>
+<li><code>TOP_RIGHT</code></li>
+<li><code>BOTTOM_LEFT</code></li>
+<li><code>BOTTOM_RIGHT</code></li>
+</ul>
+<p>Again, based on the mouse click starting point and ending point, we can get the movement value of X and Y. And with the <em>position</em> of the adjuster, we can know how to resize the box correctly.</p>
+<p>For example, For <code>Top_Left</code> adjuster, </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> Position.TOP_LEFT:</span><br><span class="line">  top += movementY;</span><br><span class="line">  height -= movementY;</span><br><span class="line">  left += movementX;</span><br><span class="line">  width -= movementX;</span><br><span class="line">  <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>Then we can get the updated <code>top</code>, <code>left</code>, <code>height</code> and <code>width</code>.</p>
+<p>And then based on these values, we can then re-calculate the starting point and the ending point, then refresh and repaint the div box on the web page.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.startCoordinator = &#123;</span><br><span class="line">  x: left,</span><br><span class="line">  y: top</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.endCoordinator = &#123;</span><br><span class="line">  x: left + width,</span><br><span class="line">  y: top + height</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.ref.style.top = <span class="string">`<span class="subst">$&#123;top&#125;</span>px`</span>;</span><br><span class="line"><span class="keyword">this</span>.ref.style.left = <span class="string">`<span class="subst">$&#123;left&#125;</span>px`</span>;</span><br><span class="line"><span class="keyword">this</span>.ref.style.width = <span class="string">`<span class="subst">$&#123;width&#125;</span>px`</span>;</span><br><span class="line"><span class="keyword">this</span>.ref.style.height = <span class="string">`<span class="subst">$&#123;height&#125;</span>px`</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="Handling-Mouse-Events"><a href="#Handling-Mouse-Events" class="headerlink" title="Handling Mouse Events"></a>Handling Mouse Events</h1><p>The headache point in this demo is definitely to handle the mouse events manually. </p>
+<p>We need to be careful on what behaviour should be performed when a certain type of mouse event is occurred.</p>
+<p>For example, in the initial drawing phase, we need to utilise <code>mousemove</code> event to handle the div box resizing when dragging it. </p>
+<p>However, we cannot directly hook the handler function to the <code>mousemove</code> event in <code>document.body</code>, because it has a pre-condition, that is we need to firstly perform <code>mousedown</code> event, which is when the user click the mouse and start to drag. Otherwise, you would see the box flickering around all the time when your mouse moves. </p>
+<p>And you also need to remove this <code>mousemove</code> event after drawing is complete, or you would find the box keeps changing the size while your mouse moves after drawing.</p>
+<p>So, to solve this problem, you should only add <code>mousemove</code> and <code>mouseup</code> events when <code>mousedown</code> is triggered, and remove both events when <code>mouseup</code> is actually triggered, to avoid undesired and unnecessary resize of the div box.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onMouseDown</span>(<span class="params">e: MouseEvent</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!cropper) &#123;</span><br><span class="line">    cropper = <span class="keyword">new</span> Cropper(<span class="built_in">document</span>.getElementById(<span class="string">'app'</span>));</span><br><span class="line">    cropper.start(e);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.body.addEventListener(<span class="string">'mousemove'</span>, onMouseMove);</span><br><span class="line">    <span class="built_in">document</span>.body.addEventListener(<span class="string">'mouseup'</span>, onMouseUp);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onMouseMove</span>(<span class="params">e: MouseEvent</span>) </span>&#123;</span><br><span class="line">  cropper.move(e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onMouseUp</span>(<span class="params">e: MouseEvent</span>) </span>&#123;</span><br><span class="line">  cropper.stop(e);</span><br><span class="line">  <span class="built_in">document</span>.body.removeEventListener(<span class="string">'mousemove'</span>, onMouseMove);</span><br><span class="line">  <span class="built_in">document</span>.body.removeEventListener(<span class="string">'mouseup'</span>, onMouseUp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.addEventListener(<span class="string">'mousedown'</span>, onMouseDown);</span><br></pre></td></tr></table></figure>
+<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><p>To me, this is an interesting demo on how to create interactive elements using pure HTML, CSS and JavaScript / TypeScript.</p>
+<p>The demo itself is not perfect. For example, it does not have dragging to reverse the div box feature. However, it is still a nice learning experience on practicing the combination of event handling and CSS drawing.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+            <a href="/tags/Front-end/" rel="tag"># Front-end</a>
+          
+            <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          
+            <a href="/tags/HTML/" rel="tag"># HTML</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/16/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript/" rel="next" title="How to Properly Mock Typed Variables in Unit Tests with TypeScript">
+                <i class="fa fa-chevron-left"></i> How to Properly Mock Typed Variables in Unit Tests with TypeScript
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Zhiyue Yi">
+            
+              <p class="site-author-name" itemprop="name">Zhiyue Yi</p>
+              <p class="site-description motion-element" itemprop="description">简博记事 · 山不在高，有仙则灵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ZhiyueYi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lane0223@hotmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.linkedin.com/in/zhiyue/" target="_blank" title="LinkedIn"><i class="fa fa-fw fa-linkedin"></i>LinkedIn</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Following
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/berwin/Blog" title="Berwin" target="_blank">Berwin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.phodal.com/" title="Phodal" target="_blank">Phodal</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lihautan.com/" title="Tan Li Hau" target="_blank">Tan Li Hau</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Determine-The-Position-of-the-Box"><span class="nav-number">1.</span> <span class="nav-text">Determine The Position of the Box</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Resize-the-Box-Using-8-Adjusters"><span class="nav-number">2.</span> <span class="nav-text">Resize the Box Using 8 Adjusters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Handling-Mouse-Events"><span class="nav-number">3.</span> <span class="nav-text">Handling Mouse Events</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhiyue Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz", "bdUvz3GBvqIqUVKnu9Idzixo");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yizhiyue.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yizhiyue.me/2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/';
+        this.page.identifier = '2020/09/06/resizable-div-box-with-mouse-dragging-support-using-vanilla-javascript-typescript/';
+        this.page.title = 'Resizable Div Box with Mouse Dragging Support Using Vanilla JavaScript / TypeScript';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yizhiyue.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "mEGi5sBFEP371zIo2Xx7C3E2-gzGzoHsz",
+                'X-LC-Key': "bdUvz3GBvqIqUVKnu9Idzixo",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
